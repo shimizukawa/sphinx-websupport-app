@@ -9,7 +9,12 @@
       <div class="documentwrapper">
         <div class="bodywrapper">
           <div class="body">
-	    {{ document.render_html(comments=True)|safe }}
+	    {% for slice in document.slices -%}
+	    {{ slice.html|safe }}
+	    {% if slice.commentable -%}
+	    <a href="#" onclick="alert('[ comment stub for <{{ slice.id }}> ]');">comment</a>
+	    {%- endif %}
+	    {%- endfor %}
 	  </div>
 	</div>
       </div>
