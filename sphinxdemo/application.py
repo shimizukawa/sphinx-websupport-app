@@ -14,7 +14,7 @@ def build():
     return 'Build Complete'
 
 @app.route('/docs/')
-@app.route('/docs/<docname>')
+@app.route('/docs/<path:docname>')
 def doc(docname='contents'):
     document = support.get_document(docname)
     return render_template('doc.html', document=document)
