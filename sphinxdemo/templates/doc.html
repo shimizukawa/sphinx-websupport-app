@@ -8,7 +8,7 @@
   {% for slice in document.slices -%}
     {{ slice.html|safe }}
     {% if slice.commentable -%}
-      <a href="#" onclick="alert('[ comment stub for <{{ slice.id }}> ]');">
+      <a href="#" onclick="alert('[ comment stub for &lt;{{ slice.id }}&gt; ]'); return false;">
 	comment
       </a>
     {%- endif %}
