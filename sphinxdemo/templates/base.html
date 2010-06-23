@@ -14,19 +14,9 @@
       <img src="/static/sphinx.png" alt="Sphinx logo" />
     </div>
 
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-	</li>
-      </ul>
-    </div>
+    {% block relbar1 %}{% endblock %}
     
-    <div class="sphinxsidebar">
-      <div class="sphinxsidebarwrapper">
-	{% block sidebar %}{% endblock %}
-      </div>
-    </div>
+    {% block sidebar %}{% endblock %}
     
     <div class="document">
       <div class="documentwrapper">
@@ -39,12 +29,7 @@
       <div class="clearer"></div>
     </div>
     
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px"></li>
-      </ul>
-    </div>
+    {% block relbar2 %}{% endblock %}
     
     <div class="footer">
       &copy; Copyright 2007-2010, Georg Brandl.

@@ -22,9 +22,18 @@
 
 {% endblock %}
 
+{% block relbar1 %}
+  {{ document.relbar|safe }}
+{% endblock %}
+
 {% block body %}
   {{ document.body|safe }}
 {% endblock %}
 
 {% block sidebar %}
+  {{ document.sidebar|safe }}
+{% endblock %}
+
+{% block relbar2 %}
+  {{ document.relbar|safe }}
 {% endblock %}
