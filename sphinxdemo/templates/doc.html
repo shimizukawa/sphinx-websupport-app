@@ -4,7 +4,19 @@
   {{ document.title }}
 {% endblock %}
 
-{% block extra_js %}
+{% block extra_js_before %}
+  <script type="text/javascript">
+    var DOCUMENTATION_OPTIONS = {
+      URL_ROOT:    '',
+      VERSION:     '0.6.7',
+      COLLAPSE_MODINDEX: false,
+      FILE_SUFFIX: '',
+      HAS_SOURCE:  true
+    };
+  </script>
+{% endblock %}
+
+{% block extra_js_after %}
   <script type="text/javascript">
     <!--
     $(document).ready(function() {
