@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request
-from sphinx.websupport import support
+from sphinx.websupport import WebSupport
 
 from sphinxdemo import conf
 
 app = Flask(__name__)
 
-support.init(srcdir=conf.DOCTREE_ROOT,
-             outdir=conf.OUTPUT_DIR,
-             search='xapian')
+support = WebSupport(srcdir=conf.DOCTREE_ROOT,
+                     outdir=conf.OUTPUT_DIR,
+                     search='xapian')
 
 @app.route('/build')
 def build():
