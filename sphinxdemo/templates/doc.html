@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}
+{%- block title %}
   {{ document.title }}
-{% endblock %}
+{%- endblock %}
 
-{% block extra_js_before %}
+{%- block js %}
   <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
       URL_ROOT:    '',
@@ -14,28 +14,26 @@
       HAS_SOURCE:  true
     };
   </script>
-{% endblock %}
-
-{% block extra_js_after %}
+  {{ super() }}
   <script type="text/javascript" src="/static/websupport.js"></script>
   <script type="text/javascript">
     $(document).ready(function() {
       $(".spxcmt").comment();
     });
   </script>
-{% endblock %}
+{%- endblock %}
 
-{% block relbar1 %}
+{%- block relbar1 %}
   {{ document.relbar|safe }}
-{% endblock %}
+{%- endblock %}
 
-{% block body %}
+{%- block body %}
   {{ document.body|safe }}
-{% endblock %}
+{%- endblock %}
 
-{% block sidebar %}
+{%- block sidebar %}
   {{ document.sidebar|safe }}
-{% endblock %}
+{%- endblock %}
 
 {% block relbar2 %}
   {{ document.relbar|safe }}

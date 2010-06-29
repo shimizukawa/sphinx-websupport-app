@@ -7,11 +7,11 @@
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="/static/sphinxdoc.css" type="text/css" />
     <link rel="stylesheet" href="/static/pygments.css" type="text/css" />
-    {% block extra_js_before %}{% endblock %}
-    <script type="text/javascript" src="/static/jquery.js"></script>
-    <script type="text/javascript" src="/static/underscore.js"></script>
-    <script type="text/javascript" src="/static/doctools.js"></script>
-    {% block extra_js_after %}{% endblock %}
+    {% block js %}
+      <script type="text/javascript" src="/static/jquery.js"></script>
+      <script type="text/javascript" src="/static/underscore.js"></script>
+      <script type="text/javascript" src="/static/doctools.js"></script>
+    {% endblock %}
   </head>
   <body>
     <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
