@@ -17,17 +17,11 @@
 {% endblock %}
 
 {% block extra_js_after %}
+  <script type="text/javascript" src="/static/websupport.js"></script>
   <script type="text/javascript">
-    <!--
     $(document).ready(function() {
-      $(".spxcmt").append(' <a href="#" class="sphinx_comment"><img src="/static/comment.png" alt="comment" /></a>');
-      $("a.sphinx_comment").click(function() {
-        id = $(this).parent().attr('id');
-        alert('[ comment stub ' + id + ' ]');
-        return false;
-      });
+      $(".spxcmt").comment();
     });
-    -->
   </script>
 {% endblock %}
 
