@@ -11,10 +11,16 @@ app.config.update(
     SECRET_KEY = conf.SECRET_KEY,
 )
 
+def get_user(user_id):
+    user = User.query.filter(User.id==user_id).first()
+    name = user.name if user is not None else 'Anonymous'
+    return {'name': name}
+
 support = WebSupport(srcdir=conf.DOCTREE_ROOT,
                      outdir=conf.OUTPUT_DIR,
                      search='xapian',
-                     comments=True)
+                     comments=True,
+                     get_user=get_user)
 
 @app.route('/build')
 def build():
@@ -45,7 +51,8 @@ def get_comments():
 def add_comment():
     parent_id = request.form.get('parent', '')
     text = request.form.get('text', '')
-    comment = support.add_comment(parent_id, text)
+    user_id = g.user.id if g.user is not None else None
+    comment = support.add_comment(parent_id, text, user_id=user_id)
     return jsonify(comment=comment)
 
 

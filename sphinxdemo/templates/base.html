@@ -18,6 +18,15 @@
   <body>
     <div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
       <img src="/static/sphinx.png" alt="Sphinx logo" />
+
+      <div id="login">
+	{%- if g.user %}
+	  Logged in as <a href="/profile">{{ g.user.name }}</a> -  
+	  <a href="/logout">logout</a>
+	{%- else %}
+	  <a href="/login" title="Login">Login</a>
+	{%- endif %}
+      </div>
     </div>
 
     {% block relbar1 %}{% endblock %}
