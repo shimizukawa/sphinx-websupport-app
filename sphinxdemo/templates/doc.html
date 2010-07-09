@@ -4,6 +4,11 @@
   {{ document.title }}
 {%- endblock %}
 
+{% block css %}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/websupport.css" type="text/css" media="screen" />
+{% endblock %}
+
 {%- block js %}
   <script type="text/javascript">
     var DOCUMENTATION_OPTIONS = {
@@ -13,13 +18,63 @@
       FILE_SUFFIX: '',
       HAS_SOURCE:  true
     };
+
+    var COMMENT_OPTIONS = {
+      addCommentURL: '/docs/add_comment',
+      getCommentsURL: '/docs/get_comments'
+    };
   </script>
   {{ super() }}
   <script type="text/javascript" src="/static/websupport.js"></script>
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $(".spxcmt").comment();
-    });
+
+  <script type="text/html" id="reply_template">
+    <li>
+      <div class="reply_div" id="rd<%id%>">
+	<form id="rf<%id%>">
+	  <textarea name="comment"></textarea>
+          <input type="submit" value="add reply" />
+          <input type="hidden" name="parent" value="c<%id%>" />
+        </form>
+      </div>
+    </li>
+  </script>
+
+  <script type="text/html" id="comment_template">
+    <div  id="cd<%id%>" class="spxcdiv">
+      <div class="vote">
+	<div class="arrow"><img src="<%upArrow%>" /></div>
+	<div class="arrow"><img src="<%downArrow%>" /></div>
+      </div>
+      <div class="comment_content">
+	<p class="tagline comment">
+	  <span class="user_id"><%user_id%></span>
+	  <span class="rating"><%rating%></span>
+	  <span class="delta"><%time.delta%></span>
+	</p>
+	<p class="comment_text comment"><%text%></p>
+	<p class="comment_opts comment">
+	  <a href="#" class="reply" id="rl<%id%>">reply</a>
+	  <a href="#" class="close_reply" id="cr<%id%>">hide</a>
+	</p>
+	<ul class="children" id="cl<%id%>"></ul>
+      </div>
+      <div class="clearleft"></div>
+    </div>
+  </script>
+
+  <script type="text/html" id="popup_template">
+    <div class="popup_comment">
+      <a id="comment_close" href="#">x</a>
+      <h1>Comments</h1>
+      <form method="post" id="comment_form" action="/docs/add_comment">
+	<textarea name="comment"></textarea>
+	<input type="submit" value="add comment" id="comment_button" />
+	<input type="hidden" name="parent" />
+      </form>
+      <h3 id="comment_notification">loading comments... <img src="/static/ajax-loader.gif" alt="" /></h3>
+      <ul id="comment_ul"></ul>
+    </div>
+    <div id="focuser"></div>
   </script>
 {%- endblock %}
 

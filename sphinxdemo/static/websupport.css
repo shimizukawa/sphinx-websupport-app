@@ -1,0 +1,91 @@
+/** Popup window styling */
+div.popup_comment {
+    display: none;
+    width: 800px;
+    border: 1px solid #555555;
+    z-index: 16;
+    padding: 6px 18px;
+    background: #FFF;
+    text-align: left;
+}
+
+div.popup_comment h1 {
+    border-bottom: 1px dotted #777;
+}
+
+div.popup_comment h3 {
+    text-align: center;
+    color: #11557C;
+}
+
+div.popup_comment textarea {
+    display: block;
+    width: 550px;
+    margin: 6px 0;
+}
+
+div.popup_comment ul {
+    list-style: none;
+    padding: 0 0 0 10px;
+}
+
+div.popup_comment ul li {
+    margin-top: .5em;
+}
+
+div#focuser {
+    background: #000;
+    display: none;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 8;
+    opacity: 0.75;
+}
+
+a#comment_close {
+    float: right;
+}
+
+div.vote {
+    padding-top: 3px;
+    float: left;
+}
+
+div.arrow {
+    width: 16px;
+    height: 16px;
+    margin-bottom: 10px;
+}
+
+p.tagline, p.comment_text, p.comment_opts {
+    margin: 0 0 0 25px;
+}
+
+.rating, .delta {
+    font-size: .9em;
+}
+
+.user_id {
+    color: #EE9816;
+}
+
+p.comment_opts a {
+    color: #666;
+    font-size: .9em;
+}
+
+ul.children {
+    margin-left: 22px;
+    border-left: 1px solid #DDD;
+}
+
+a.close_reply {
+    display: none;
+}
+
+div.clearleft {
+    clear: left;
+}
