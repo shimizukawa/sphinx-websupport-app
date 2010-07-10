@@ -21,7 +21,8 @@
 
     var COMMENT_OPTIONS = {
       addCommentURL: '/docs/add_comment',
-      getCommentsURL: '/docs/get_comments'
+      getCommentsURL: '/docs/get_comments',
+      processVoteURL: '/docs/process_vote'
     };
   </script>
   {{ super() }}
@@ -42,13 +43,27 @@
   <script type="text/html" id="comment_template">
     <div  id="cd<%id%>" class="spxcdiv">
       <div class="vote">
-	<div class="arrow"><img src="<%upArrow%>" /></div>
-	<div class="arrow"><img src="<%downArrow%>" /></div>
+	<div class="arrow">
+	  <a href="#" id="uv<%id%>" class="vote">
+	    <img src="<%upArrow%>" />
+	  </a>
+	  <a href="#" id="uu<%id%>" class="un vote">
+	    <img src="<%upArrowPressed%>" />
+	  </a>
+	</div>
+	<div class="arrow">
+	  <a href="#" id="dv<%id%>" class="vote">
+	    <img src="<%downArrow%>" id="da<%id%>" />
+	  </a>
+	  <a href="#" id="du<%id%>" class="un vote">
+	    <img src="<%downArrowPressed%>" />
+	  </a>
+	</div>
       </div>
       <div class="comment_content">
 	<p class="tagline comment">
-	  <span class="user_id"><%user.name%></span>
-	  <span class="rating"><%rating%></span>
+	  <span class="user_id"><%username%></span>
+	  <span class="rating"><%pretty_rating%></span>
 	  <span class="delta"><%time.delta%></span>
 	</p>
 	<p class="comment_text comment"><%text%></p>

@@ -11,16 +11,10 @@ app.config.update(
     SECRET_KEY = conf.SECRET_KEY,
 )
 
-def get_user(user_id):
-    user = User.query.filter(User.id==user_id).first()
-    name = user.name if user is not None else 'Anonymous'
-    return {'name': name}
-
 support = WebSupport(srcdir=conf.DOCTREE_ROOT,
                      outdir=conf.OUTPUT_DIR,
                      search='xapian',
-                     comments=True,
-                     get_user=get_user)
+                     comments=True)
 
 @app.route('/build')
 def build():
@@ -43,18 +37,29 @@ def search():
 
 @app.route('/docs/get_comments')
 def get_comments():
+    user_id = g.user.id if g.user else None
     parent_id = request.args.get('parent', '')
-    comments = support.get_comments(parent_id)
+    comments = support.get_comments(parent_id, user_id)
     return jsonify(comments=comments)
 
 @app.route('/docs/add_comment', methods=['POST'])
 def add_comment():
     parent_id = request.form.get('parent', '')
     text = request.form.get('text', '')
-    user_id = g.user.id if g.user is not None else None
-    comment = support.add_comment(parent_id, text, user_id=user_id)
+    username = g.user.name if g.user is not None else 'Anonymous'
+    comment = support.add_comment(parent_id, text, username=username)
     return jsonify(comment=comment)
 
+@app.route('/docs/process_vote', methods=['POST'])
+def process_vote():
+    if g.user is None:
+        abort(401)
+    comment_id = request.form.get('comment_id')
+    value = request.form.get('value')
+    if value is None or comment_id is None:
+        abort(400)
+    support.process_vote(comment_id, g.user.id, value)
+    return "success"
 
 # Authentication Stuff
 # Based on mitsuhiko's flask-openid

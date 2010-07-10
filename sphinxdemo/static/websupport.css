@@ -68,6 +68,10 @@ p.tagline, p.comment_text, p.comment_opts {
     font-size: .9em;
 }
 
+a.un {
+    display: none;
+}
+
 .user_id {
     color: #EE9816;
 }
