@@ -22,7 +22,10 @@
     var COMMENT_OPTIONS = {
       addCommentURL: '/docs/add_comment',
       getCommentsURL: '/docs/get_comments',
-      processVoteURL: '/docs/process_vote'
+      processVoteURL: '/docs/process_vote',
+      {%- if g.user %}
+      voting: true,
+      {%- endif %}
     };
   </script>
   {{ super() }}
@@ -85,12 +88,19 @@
 	<textarea name="comment"></textarea>
 	<input type="submit" value="add comment" id="comment_button" />
 	<input type="hidden" name="parent" />
+      <p class="sort_options">
+	Sort by: 
+	<a href="#" class="sort_option" id="rating">top</a>
+	<a href="#" class="sort_option" id="ascage">newest</a>
+	<a href="#" class="sort_option" id="age">oldest</a>
+      </p>
       </form>
       <h3 id="comment_notification">loading comments... <img src="/static/ajax-loader.gif" alt="" /></h3>
       <ul id="comment_ul"></ul>
     </div>
     <div id="focuser"></div>
   </script>
+
 {%- endblock %}
 
 {%- block relbar1 %}

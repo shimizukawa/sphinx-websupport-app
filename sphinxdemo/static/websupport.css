@@ -1,3 +1,16 @@
+div.popup_error {
+    background: #FFF;
+    display: none;
+    position: fixed;
+    padding-bottom: .2em;
+    margin: 0;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 32;
+    border-bottom: 1px solid #CCC;
+}
+
 /** Popup window styling */
 div.popup_comment {
     display: none;
@@ -22,6 +35,20 @@ div.popup_comment textarea {
     display: block;
     width: 550px;
     margin: 6px 0;
+}
+
+p.sort_options {
+    float: right;
+    margin: 0 2em;
+}
+
+a.sort_option {
+    margin-left: .5em;
+}
+
+a.sel {
+    color: #2491cf;
+    text-decoration: underline;
 }
 
 div.popup_comment ul {
