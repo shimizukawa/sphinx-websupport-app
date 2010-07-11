@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
 {% block body %}
   <h2>Sign in</h2>
@@ -9,5 +9,6 @@
       <input type=text name=openid size=30>
       <input type=submit value="Sign in">
       <input type=hidden name=next value="{{ next }}">
+    </p>
   </form>
 {% endblock %}
