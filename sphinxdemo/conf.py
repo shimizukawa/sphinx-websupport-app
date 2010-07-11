@@ -3,3 +3,5 @@ DEBUG = True
 
 DOCTREE_ROOT = ''
 OUTPUT_DIR = ''
+DATABASE_URI = ''
+SECRET_KEY = ''
