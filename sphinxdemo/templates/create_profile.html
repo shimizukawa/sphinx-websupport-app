@@ -1,5 +1,14 @@
 {% extends "base.html" %}
 {% block title %}Create Profile{% endblock %}
+{% block relbar1 %}
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Contents</a>
+          &raquo;</li>
+      </ul>
+    </div>
+{% endblock %}
 {% block body %}
   <h2>Create Profile</h2>
   <p>
