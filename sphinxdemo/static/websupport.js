@@ -81,27 +81,31 @@
     // Position the popup and show it.
     var clientWidth = document.documentElement.clientWidth;
     var popupWidth = $('div.popup_comment').width();
-    $('div#focuser').show();
+    $('div#focuser').fadeIn('fast');
     $('div.popup_comment')
       .css({
 	'top': 100+$(window).scrollTop(),
 	'left': clientWidth/2-popupWidth/2,
 	'position': 'absolute'
       })
-      .show();
-
-    getComments(id);
+      .fadeIn('fast', function() {
+	getComments(id);
+      });
   };
 
   /**
    * Hide the comments popup window.
    */
   function hide() {
-    $('div#focuser').hide();
-    $('div.popup_comment').hide();
-    $('ul#comment_ul').empty();
-    $('h3#comment_notification').show();
-    $('form#comment_form').reset();
+    $('div#focuser').fadeOut('fast');
+    $('div.popup_comment').fadeOut('fast', function() {
+      $('ul#comment_ul').empty();
+      $('h3#comment_notification').show();
+      $('form#comment_form').find('textarea')
+	.val('').end()
+	.find('textarea, input')
+	  .removeAttr('disabled');
+    });
   };
 
   /**
@@ -114,17 +118,21 @@
       url: opts.getCommentsURL,
       data: {parent: 's' + id},
       success: function(data, textStatus, request) {
+	var ul = $('ul#comment_ul').hide();
 	if (data.comments.length == 0) {
-	  $('ul#comment_ul').html('<li>No comments yet.</li>');
+	  ul.html('<li>No comments yet.</li>');
 	  commentListEmpty = true;
+	  var speed = 128;
 	}
 	else {
 	  // If there are comments, sort them and put them in the list.
 	  comments = sortComments(data.comments);
-	  appendComments(data.comments);
+	  var speed = data.comments.length * 128;
+	  appendComments(data.comments, ul);
 	  commentListEmpty = false;
 	}
-	$('h3#comment_notification').hide()
+	$('h3#comment_notification').slideUp(speed+200);
+	ul.slideDown(speed);
       },
       error: function(request, textStatus, error) {
 	alert('error');
@@ -171,8 +179,6 @@
    * lists, creating the comment tree.
    */
   function appendComments(comments, ul) {
-    if (ul == null)
-      ul = $('ul#comment_ul');
     $.each(comments, function() {
       var div = createCommentDiv(this);
       ul.append($('<li></li>').html(div));
@@ -203,19 +209,23 @@
       var siblings = getChildren(ul);
     }
 
+    var li = $('<li></li>');
+    li.hide();
+
     // Determine where in the parents children list to insert this comment.
     for(i=0; i < siblings.length; i++) {
       if (comp(comment, siblings[i]) <= 0) {
 	$('#cd' + siblings[i].id)
 	  .parent()
-	    .before($('<li></li>')
-	      .html(div));
+	    .before(li.html(div));
+	li.slideDown('fast');
 	return;
       }
     }
     // If we get here, this comment rates lower than all the others,
     // or it is the only comment in the list.
-    ul.append($('<li></li>').html(div));
+    ul.append(li.html(div));
+    li.slideDown('fast');
   };
 
   /**
@@ -228,11 +238,10 @@
     expiration.setDate(expiration.getDate() + 365);
     document.cookie= 'sortBy=' + escape(link.attr('id')) +
       ';expires=' + expiration.toUTCString();
-    comments = getChildren($('ul#comment_ul'), true);
+    var comments = getChildren($('ul#comment_ul'), true);
     comments = sortComments(comments);
-    $('ul#comment_ul').empty();
 
-    appendComments(comments);
+    appendComments(comments, $('ul#comment_ul').empty());
   };
 
   /**
@@ -305,8 +314,9 @@
     $('#cr' + id).show();
 
     // Add the reply li to the children ul.
+    var div = $(renderTemplate(replyTemplate, {id: id})).hide();
     $('#cl' + id)
-      .prepend(renderTemplate(replyTemplate, {id: id}))
+      .prepend(div)
       // Setup the submit handler for the reply form.
       .find('#rf' + id)
 	.submit(function(event) {
@@ -314,6 +324,7 @@
 	  addComment($('#rf' + id));
 	  closeReply(id);
 	});
+    div.slideDown('fast');
   };
 
   /**
@@ -321,7 +332,10 @@
    */
   function closeReply(id) {
     // Remove the reply div from the DOM.
-    $('#rd' + id).remove();
+    $('#rd' + id).slideUp('fast', function() {
+      $(this).remove();
+    });
+
     // Swap out the hide link for the reply link
     $('#cr' + id).hide();
     $('#rl' + id).show();
@@ -364,7 +378,7 @@
    */
   function getChildren(ul, recursive) {
     var children = [];
-    ul.children().children()
+    ul.children().children("[id^='cd']")
       .each(function() {
 	var comment = $(this).data('comment');
 	if (recursive) {
