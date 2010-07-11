@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Sign in{% endblock %}
+{% block relbar1 %}
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li><a href="{{ url_for('index') }}">Contents</a>
+          &raquo;</li>
+      </ul>
+    </div>
+{% endblock %}
+{% block body %}
+  <h2>Sign in</h2>
+  <form action="" method=post>
+    {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
+    <p>
+      OpenID:
+      <input type=text name=openid size=30>
+      <input type=submit value="Sign in">
+      <input type=hidden name=next value="{{ next }}">
+    </p>
+  </form>
+{% endblock %}
