@@ -13,8 +13,7 @@ app.config.update(
 
 support = WebSupport(srcdir=conf.DOCTREE_ROOT,
                      outdir=conf.OUTPUT_DIR,
-                     search='xapian',
-                     comments=True)
+                     search='xapian')
 
 @app.route('/build')
 def build():
