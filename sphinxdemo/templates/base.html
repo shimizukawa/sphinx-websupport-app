@@ -22,12 +22,12 @@
       <div id="login">
 	{%- if g.user %}
 	  Logged in as 
-	<a href="{{ url_for('edit_profile') }}">
+	<a href="{{ url_for('auth.edit_profile') }}">
 	  {{ g.user.name }}
 	</a> -  
-	  <a href="{{ url_for('logout') }}">logout</a>
+	  <a href="{{ url_for('auth.logout') }}">logout</a>
 	{%- else %}
-	  <a href="{{ url_for('login') }}" title="Login">Login</a>
+	  <a href="{{ url_for('auth.login') }}" title="Login">Login</a>
 	{%- endif %}
       </div>
     </div>
