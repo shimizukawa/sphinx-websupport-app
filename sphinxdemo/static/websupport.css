@@ -33,7 +33,7 @@ div.popup_comment h3 {
 
 div.popup_comment textarea {
     display: block;
-    width: 550px;
+    line-height: 1.5em;
     margin: 6px 0;
 }
 

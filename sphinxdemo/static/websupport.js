@@ -1,4 +1,39 @@
 (function($) {
+
+  $.fn.autogrow = function(){
+    return this.each(function(){
+      var textarea = this;
+
+      $.fn.autogrow.resize(textarea);
+
+      $(textarea)
+	.focus(function() {
+	  textarea.interval = setInterval(function() {
+	    $.fn.autogrow.resize(textarea);
+	  }, 500);
+	})
+	.blur(function() {
+	  clearInterval(textarea.interval);
+	});
+    });
+  };
+
+  $.fn.autogrow.resize = function(textarea) {
+    var lineHeight = parseInt($(textarea).css('line-height'));
+    var lines = textarea.value.split('\n');
+    var columns = textarea.cols;
+    var lineCount = 0;
+    $.each(lines, function() {
+      lineCount += Math.ceil(this.length/columns) || 1;
+    });
+    var height = lineHeight*(lineCount+1);
+    $(textarea).css('height', height);
+    //$(textarea).animate({height: height + 'px'}, 100);
+  };
+
+})(jQuery);
+
+(function($) {
   var commentListEmpty, replyTemplate, commentTemplate, popup, comp;
 
   function init() {
@@ -42,6 +77,8 @@
     // are displayed.
     var popupTemplate = $('#popup_template').html();
     var popup = $(renderTemplate(popupTemplate, opts));
+    // Setup autogrow on the textareas
+    popup.find('textarea').autogrow();
     $('body').append(popup);
   };
 
@@ -122,13 +159,17 @@
 	if (data.comments.length == 0) {
 	  ul.html('<li>No comments yet.</li>');
 	  commentListEmpty = true;
-	  var speed = 128;
+	  var speed = 100;
 	}
 	else {
 	  // If there are comments, sort them and put them in the list.
-	  comments = sortComments(data.comments);
-	  var speed = data.comments.length * 128;
-	  appendComments(data.comments, ul);
+	  var comments = sortComments(data.comments);
+	  var proposal = $('form#comment_form')
+	    .find('textarea[name="proposal"]')
+	      .val(data.source)[0];
+	  $.fn.autogrow.resize(proposal);
+	  var speed = data.comments.length * 100;
+	  appendComments(comments, ul);
 	  commentListEmpty = false;
 	}
 	$('h3#comment_notification').slideUp(speed+200);
@@ -154,7 +195,8 @@
       url: opts.addCommentURL,
       dataType: 'json',
       data: {parent: form.find('input[name="parent"]').val(),
-	     text: form.find(' textarea[name="comment"]').val()},
+	     text: form.find('textarea[name="comment"]').val(),
+	     proposal: form.find('textarea[name="proposal"]').val()},
       success: function(data, textStatus, error) {
 	// Reset the form.
 	form.find('textarea')

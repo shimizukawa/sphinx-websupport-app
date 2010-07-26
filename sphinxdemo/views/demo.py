@@ -33,15 +33,17 @@ def search():
 def get_comments():
     user_id = g.user.id if g.user else None
     parent_id = request.args.get('parent', '')
-    comments = support.get_comments(parent_id, user_id)
-    return jsonify(comments=comments)
+    data = support.get_comments(parent_id, user_id)
+    return jsonify(**data)
 
 @demo.route('/docs/add_comment', methods=['POST'])
 def add_comment():
     parent_id = request.form.get('parent', '')
     text = request.form.get('text', '')
+    proposal = request.form.get('proposal', 'wizard')
     username = g.user.name if g.user is not None else 'Anonymous'
-    comment = support.add_comment(parent_id, text, username=username)
+    comment = support.add_comment(parent_id, text, username=username,
+                                  proposal=proposal)
     return jsonify(comment=comment)
 
 @demo.route('/docs/process_vote', methods=['POST'])

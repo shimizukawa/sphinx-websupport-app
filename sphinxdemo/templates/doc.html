@@ -31,16 +31,26 @@
   {{ super() }}
   <script type="text/javascript" src="/static/websupport.js"></script>
 
-  <script type="text/html" id="reply_template">
-    <li>
-      <div class="reply_div" id="rd<%id%>">
-	<form id="rf<%id%>">
-	  <textarea name="comment"></textarea>
-          <input type="submit" value="add reply" />
-          <input type="hidden" name="parent" value="c<%id%>" />
-        </form>
-      </div>
-    </li>
+  <script type="text/html" id="popup_template">
+    <div class="popup_comment">
+      <a id="comment_close" href="#">x</a>
+      <h1>Comments</h1>
+      <form method="post" id="comment_form" action="/docs/add_comment">
+	<textarea name="comment" cols="80"></textarea>
+	<textarea name="proposal" cols="80" spellcheck="false"></textarea>
+	<input type="submit" value="add comment" id="comment_button" />
+	<input type="hidden" name="parent" />
+      <p class="sort_options">
+	Sort by: 
+	<a href="#" class="sort_option" id="rating">top</a>
+	<a href="#" class="sort_option" id="ascage">newest</a>
+	<a href="#" class="sort_option" id="age">oldest</a>
+      </p>
+      </form>
+      <h3 id="comment_notification">loading comments... <img src="/static/ajax-loader.gif" alt="" /></h3>
+      <ul id="comment_ul"></ul>
+    </div>
+    <div id="focuser"></div>
   </script>
 
   <script type="text/html" id="comment_template">
@@ -80,25 +90,16 @@
     </div>
   </script>
 
-  <script type="text/html" id="popup_template">
-    <div class="popup_comment">
-      <a id="comment_close" href="#">x</a>
-      <h1>Comments</h1>
-      <form method="post" id="comment_form" action="/docs/add_comment">
-	<textarea name="comment"></textarea>
-	<input type="submit" value="add comment" id="comment_button" />
-	<input type="hidden" name="parent" />
-      <p class="sort_options">
-	Sort by: 
-	<a href="#" class="sort_option" id="rating">top</a>
-	<a href="#" class="sort_option" id="ascage">newest</a>
-	<a href="#" class="sort_option" id="age">oldest</a>
-      </p>
-      </form>
-      <h3 id="comment_notification">loading comments... <img src="/static/ajax-loader.gif" alt="" /></h3>
-      <ul id="comment_ul"></ul>
-    </div>
-    <div id="focuser"></div>
+  <script type="text/html" id="reply_template">
+    <li>
+      <div class="reply_div" id="rd<%id%>">
+	<form id="rf<%id%>">
+	  <textarea name="comment"></textarea>
+          <input type="submit" value="add reply" />
+          <input type="hidden" name="parent" value="c<%id%>" />
+        </form>
+      </div>
+    </li>
   </script>
 
 {%- endblock %}
