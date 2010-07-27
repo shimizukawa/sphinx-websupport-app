@@ -67,6 +67,22 @@
       event.preventDefault();
       handleReSort($(this));
     });
+    $('a.show_proposal').live("click", function() {
+      showProposal($(this).attr('id').substring(2));
+      return false;
+    });
+    $('a.hide_proposal').live("click", function() {
+      hideProposal($(this).attr('id').substring(2));
+      return false;
+    });
+    $('a.show_propose_change').live("click", function() {
+      showProposeChange($(this).attr('id').substring(2));
+      return false;
+    });
+    $('a.hide_propose_change').live("click", function() {
+      hideProposeChange($(this).attr('id').substring(2));
+      return false;
+    });
   };
 
   function initTemplates() {
@@ -113,7 +129,10 @@
       .find('textarea,input')
 	.removeAttr('disabled').end()
       .find('input[name="parent"]')
-	.val('s' + id);
+	.val('s' + id).end()
+      .find('textarea[name="proposal"]')
+	.val('')
+	.hide();
 
     // Position the popup and show it.
     var clientWidth = document.documentElement.clientWidth;
@@ -156,6 +175,10 @@
       data: {parent: 's' + id},
       success: function(data, textStatus, request) {
 	var ul = $('ul#comment_ul').hide();
+	$('form#comment_form')
+	  .find('textarea[name="proposal"]')
+	    .data('source', data.source);
+
 	if (data.comments.length == 0) {
 	  ul.html('<li>No comments yet.</li>');
 	  commentListEmpty = true;
@@ -164,10 +187,6 @@
 	else {
 	  // If there are comments, sort them and put them in the list.
 	  var comments = sortComments(data.comments);
-	  var proposal = $('form#comment_form')
-	    .find('textarea[name="proposal"]')
-	      .val(data.source)[0];
-	  $.fn.autogrow.resize(proposal);
 	  var speed = data.comments.length * 100;
 	  appendComments(comments, ul);
 	  commentListEmpty = false;
@@ -268,6 +287,35 @@
     // or it is the only comment in the list.
     ul.append(li.html(div));
     li.slideDown('fast');
+  };
+
+  function showProposal(id) {
+    $('#sp' + id).hide();
+    $('#hp' + id).show();
+    $('#pr' + id).slideDown('fast');
+  };
+
+  function hideProposal(id) {
+    $('#hp' + id).hide();
+    $('#sp' + id).show();
+    $('#pr' + id).slideUp('fast');
+  };
+
+  function showProposeChange(id) {
+    $('#pc' + id).hide();
+    $('#cc' + id).show();
+    var textarea = $('textarea[name="proposal"]');
+    textarea.val(textarea.data('source'));
+    $.fn.autogrow.resize(textarea[0]);
+    textarea.slideDown('fast');
+  };
+
+  function hideProposeChange(id) {
+    $('#cc' + id).hide();
+    $('#pc' + id).show();
+    var textarea = $('textarea[name="proposal"]');
+    textarea.val('');
+    textarea.slideUp('fast');
   };
 
   /**
@@ -449,6 +497,10 @@
       div.find('#' + dir + 'v' + comment.id).hide();
       div.find('#' + dir + 'u' + comment.id).show();
     }
+
+    if (comment.proposal_diff) {
+      div.find('#sp' + comment.id).show();
+    }
     return div;
   }
 
@@ -459,16 +511,16 @@
   function renderTemplate(template, context) {
     var esc = $('<span></span>');
 
-    function handle(ph) {
+    function handle(ph, escape) {
       var cur = context;
       $.each(ph.split('.'), function() {
 	cur = cur[this];
       });
-      return esc.text(cur || "").html();
+      return escape ? esc.text(cur || "").html() : cur;
     }
 
-    return template.replace(/<%([\w\.]*)%>/g, function(){
-      return handle(arguments[1]);
+    return template.replace(/<([%#])([\w\.]*)\1>/g, function(){
+      return handle(arguments[2], arguments[1] == '%' ? true : false);
     });
   };
 

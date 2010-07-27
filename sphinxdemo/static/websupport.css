@@ -37,6 +37,10 @@ div.popup_comment textarea {
     margin: 6px 0;
 }
 
+a.hide_propose_change {
+    display: none;
+}
+
 p.sort_options {
     float: right;
     margin: 0 2em;
@@ -87,8 +91,36 @@ div.arrow {
     margin-bottom: 10px;
 }
 
-p.tagline, p.comment_text, p.comment_opts {
+div.comment_content p, pre.proposal {
+    line-height: 1.5em;
     margin: 0 0 0 25px;
+}
+
+pre.proposal {
+    color: #555;
+    display: none;
+}
+
+a.hide_proposal, a.show_proposal {
+    display: none;
+}
+
+pre.proposal .prop_added {
+    background-color: #CFC;
+}
+
+pre.proposal .prop_removed {
+    background-color: #FCC;
+}
+
+pre.proposal ins {
+    text-decoration: none;
+    background-color: #8F8;
+}
+
+pre.proposal del {
+    text-decoration: none;
+    background-color: #F88;
 }
 
 .rating, .delta {
