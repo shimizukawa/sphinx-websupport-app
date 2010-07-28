@@ -37,12 +37,14 @@
       <h1>Comments</h1>
       <form method="post" id="comment_form" action="/docs/add_comment">
 	<textarea name="comment" cols="80"></textarea>
-	  <a href="#" id="pc<%id%>" class="show_propose_change">
+	<p class="propose_button">
+	  <a href="#" class="show_propose_change">
 	    Propose a change &#9657;
 	  </a>
-	  <a href="#" id="cc<%id%>" class="hide_propose_change">
-	    Nevermind &#9663;
+	  <a href="#" class="hide_propose_change">
+	    Propose a change &#9663;
 	  </a>
+	</p>
 	<textarea name="proposal" cols="80" spellcheck="false"></textarea>
 	<input type="submit" value="add comment" id="comment_button" />
 	<input type="hidden" name="parent" />
@@ -86,21 +88,19 @@
 	  <span class="delta"><%time.delta%></span>
 	</p>
 	<p class="comment_text comment"><%text%></p>
-	<p>
+	<p class="comment_opts comment">
+	  <a href="#" class="reply" id="rl<%id%>">reply &#9657;</a>
+	  <a href="#" class="close_reply" id="cr<%id%>">reply &#9663;</a>
 	  <a href="#" id="sp<%id%>" class="show_proposal">
-	    Show Proposal &#9657;
+	    proposal &#9657;
 	  </a>
 	  <a href="#" id="hp<%id%>" class="hide_proposal">
-	    Hide Proposal &#9663;
+	    proposal &#9663;
 	  </a>
 	</p>
 	<pre class="proposal" id="pr<%id%>">
 <#proposal_diff#>
 	</pre>
-	<p class="comment_opts comment">
-	  <a href="#" class="reply" id="rl<%id%>">reply</a>
-	  <a href="#" class="close_reply" id="cr<%id%>">hide</a>
-	</p>
 	<ul class="children" id="cl<%id%>"></ul>
       </div>
       <div class="clearleft"></div>

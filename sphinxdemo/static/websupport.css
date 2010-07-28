@@ -34,11 +34,23 @@ div.popup_comment h3 {
 div.popup_comment textarea {
     display: block;
     line-height: 1.5em;
-    margin: 6px 0;
+    margin: 6px 0 0 0;
+}
+
+p.propose_button {
+    margin: 0;
+}
+
+form#comment_form input {
+    margin-top: .5em;
 }
 
 a.hide_propose_change {
     display: none;
+}
+
+a.show_propose_change, a.hide_propose_change {
+    font-size: smaller;
 }
 
 p.sort_options {
@@ -99,6 +111,7 @@ div.comment_content p, pre.proposal {
 pre.proposal {
     color: #555;
     display: none;
+    margin: .5em 0 .5em 25px;
 }
 
 a.hide_proposal, a.show_proposal {
@@ -135,9 +148,14 @@ a.un {
     color: #EE9816;
 }
 
+p.tagline span {
+    margin-right: .25em;
+}
+
 p.comment_opts a {
     color: #666;
     font-size: .9em;
+    margin-right: 1em;
 }
 
 ul.children {

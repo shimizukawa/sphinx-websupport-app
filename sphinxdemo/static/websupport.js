@@ -302,8 +302,8 @@
   };
 
   function showProposeChange(id) {
-    $('#pc' + id).hide();
-    $('#cc' + id).show();
+    $('a.show_propose_change').hide();
+    $('a.hide_propose_change').show();
     var textarea = $('textarea[name="proposal"]');
     textarea.val(textarea.data('source'));
     $.fn.autogrow.resize(textarea[0]);
@@ -311,8 +311,8 @@
   };
 
   function hideProposeChange(id) {
-    $('#cc' + id).hide();
-    $('#pc' + id).show();
+    $('a.hide_propose_change').hide();
+    $('a.show_propose_change').show();
     var textarea = $('textarea[name="proposal"]');
     textarea.val('');
     textarea.slideUp('fast');
