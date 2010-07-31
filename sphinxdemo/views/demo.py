@@ -5,8 +5,7 @@ from sphinx.websupport import WebSupport
 from sphinxdemo import conf
 
 support = WebSupport(srcdir=conf.DOCTREE_ROOT,
-                     outdir=conf.OUTPUT_DIR,
-                     search='xapian')
+                     outdir=conf.OUTPUT_DIR)
 
 demo = Module(__name__)
 
@@ -32,18 +31,19 @@ def search():
 @demo.route('/docs/get_comments')
 def get_comments():
     user_id = g.user.id if g.user else None
-    parent_id = request.args.get('parent', '')
-    data = support.get_comments(parent_id, user_id)
+    node_id = request.args.get('node', '')
+    data = support.get_comments(node_id, user_id)
     return jsonify(**data)
 
 @demo.route('/docs/add_comment', methods=['POST'])
 def add_comment():
     parent_id = request.form.get('parent', '')
+    node_id = request.form.get('node', '')
     text = request.form.get('text', '')
-    proposal = request.form.get('proposal', 'wizard')
+    proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else 'Anonymous'
-    comment = support.add_comment(parent_id, text, username=username,
-                                  proposal=proposal)
+    comment = support.add_comment(text, node=node_id, parent=parent_id,
+                                  username=username, proposal=proposal)
     return jsonify(comment=comment)
 
 @demo.route('/docs/process_vote', methods=['POST'])

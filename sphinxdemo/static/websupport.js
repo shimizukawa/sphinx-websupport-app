@@ -128,8 +128,8 @@
     $('form#comment_form')
       .find('textarea,input')
 	.removeAttr('disabled').end()
-      .find('input[name="parent"]')
-	.val('s' + id).end()
+      .find('input[name="node"]')
+	.val(id).end()
       .find('textarea[name="proposal"]')
 	.val('')
 	.hide();
@@ -172,7 +172,7 @@
     $.ajax({
       type: 'GET',
       url: opts.getCommentsURL,
-      data: {parent: 's' + id},
+      data: {node: id},
       success: function(data, textStatus, request) {
 	var ul = $('ul#comment_ul').hide();
 	$('form#comment_form')
@@ -213,7 +213,8 @@
       type: "POST",
       url: opts.addCommentURL,
       dataType: 'json',
-      data: {parent: form.find('input[name="parent"]').val(),
+      data: {node: form.find('input[name="node"]').val(),
+             parent: form.find('input[name="parent"]').val(),
 	     text: form.find('textarea[name="comment"]').val(),
 	     proposal: form.find('textarea[name="proposal"]').val()},
       success: function(data, textStatus, error) {
