@@ -4,15 +4,9 @@ from sphinx.websupport import WebSupport
 
 from sphinxdemo import conf
 
-support = WebSupport(srcdir=conf.DOCTREE_ROOT,
-                     outdir=conf.OUTPUT_DIR)
+support = WebSupport(datadir=conf.OUTPUT_DIR)
 
 demo = Module(__name__)
-
-@demo.route('/build')
-def build():
-    support.build()
-    return 'Build Complete'
 
 @demo.route('/docs/')
 def docs():
