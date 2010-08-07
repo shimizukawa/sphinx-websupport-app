@@ -60,6 +60,18 @@ def reject_comment():
     return 'OK'
 
 
+@demo.route('/docs/delete_comment', methods=['POST'])
+def delete_comment():
+    moderator = g.user.moderator if g.user else False
+    username = g.user.name if g.user else ''
+    comment_id = request.form.get('id')
+    try:
+        support.delete_comment(comment_id, moderator=g.user.moderator)
+    except UserNotAuthorizedError:
+        abort(401)
+    return 'OK'
+
+
 @demo.route('/docs/process_vote', methods=['POST'])
 def process_vote():
     if g.user is None:

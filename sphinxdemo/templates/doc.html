@@ -25,10 +25,12 @@
       processVoteURL: '/docs/process_vote',
       acceptCommentURL: '/docs/accept_comment',
       rejectCommentURL: '/docs/reject_comment',
+      deleteCommentURL: '/docs/delete_comment',
       {%- if g.user %}
       voting: true,
+      username: '{{ g.user.name }}',
       {%- endif %}
-      moderator: true
+      moderator: false
     };
   </script>
   {{ super() }}
@@ -93,18 +95,21 @@
 	</p>
 	<p class="comment_text comment"><%text%></p>
 	<p class="comment_opts comment">
-	  <a href="#" class="reply" id="rl<%id%>">reply &#9657;</a>
+	  <a href="#" class="reply hidden" id="rl<%id%>">reply &#9657;</a>
 	  <a href="#" class="close_reply" id="cr<%id%>">reply &#9663;</a>
 	  <a href="#" id="sp<%id%>" class="show_proposal">
 	    proposal &#9657;
+	  </a>
+	  <a href="#" id="hp<%id%>" class="hide_proposal">
+	    proposal &#9663;
+	  </a>
+	  <a href="#" id="dc<%id%>" class="delete_comment hidden">
+	    delete
 	  </a>
 	  <span id="cm<%id%>" class="moderation hidden">
 	    <a href="#" id="ac<%id%>" class="accept_comment">accept</a>
 	    <a href="#" id="rc<%id%>" class="reject_comment">reject</a>
 	  </span>
-	  <a href="#" id="hp<%id%>" class="hide_proposal">
-	    proposal &#9663;
-	  </a>
 	</p>
 	<pre class="proposal" id="pr<%id%>">
 <#proposal_diff#>

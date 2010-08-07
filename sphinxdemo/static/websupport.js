@@ -91,6 +91,10 @@
       rejectComment($(this).attr('id').substring(2));
       return false;
     });
+    $('a.delete_comment').live("click", function() {
+      deleteComment($(this).attr('id').substring(2));
+      return false;
+    });
   };
 
   function initTemplates() {
@@ -330,6 +334,25 @@
     });
   };
 
+  function deleteComment(id) {
+    $.ajax({
+      type: 'POST',
+      url: opts.deleteCommentURL,
+      data: {id: id},
+      success: function(data, textStatus, request) {
+	$('#cd' + id)
+	  .find('span.user_id, p.comment_text')
+	    .text('[deleted]').end()
+	  .find('span.moderation, a.delete_comment, a.show_proposal, '
+		+ 'a.hide_propsal, a.reply, a.close_reply')
+	    .remove()
+      },
+      error: function(request, textStatus, error) {
+	alert(error);
+      },
+    });
+  };
+
   function showProposal(id) {
     $('#sp' + id).hide();
     $('#hp' + id).show();
@@ -529,23 +552,29 @@
     comment.pretty_rating = comment.rating + ' point' +
       (comment.rating == 1 ? '' : 's');
     // Create a div for this comment.
-    var context = $.extend({}, comment, opts);
+    var context = $.extend({}, opts, comment);
     var div = $(renderTemplate(commentTemplate, context));
 
     // If the user has voted on this comment, highlight the correct arrow.
     if (comment.vote) {
-      var dir = (comment.vote == 1) ? 'u' : 'd';
-      div.find('#' + dir + 'v' + comment.id).hide();
-      div.find('#' + dir + 'u' + comment.id).show();
+      var direction = (comment.vote == 1) ? 'u' : 'd';
+      div.find('#' + direction + 'v' + comment.id).hide();
+      div.find('#' + direction + 'u' + comment.id).show();
     }
 
-    if (comment.proposal_diff) {
-      div.find('#sp' + comment.id).show();
+    if (comment.text != '[deleted]') {
+      div.find('a.reply').show();
+      if (comment.proposal_diff) {
+	div.find('#sp' + comment.id).show();
+      }
+      if (opts.moderator && !comment.displayed) {
+	div.find('#cm' + comment.id).show();
+      }
+      if (opts.moderator || (opts.username == comment.username)) {
+	div.find('#dc' + comment.id).show();
+      }
     }
 
-    if (opts.moderator && !comment.displayed) {
-      div.find('#cm' + comment.id).show();
-    }
     return div;
   }
 
@@ -600,6 +629,7 @@
     getCommentsURL: '/get_comments',
     acceptCommentURL: '/accept_comment',
     rejectCommentURL: '/reject_comment',
+    rejectCommentURL: '/delete_comment',
     commentHTML: '<img src="/static/comment.png" alt="comment" />',
     upArrow: '/static/up.png',
     downArrow: '/static/down.png',
