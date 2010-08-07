@@ -1,5 +1,4 @@
 (function($) {
-
   $.fn.autogrow = function(){
     return this.each(function(){
       var textarea = this;
@@ -28,13 +27,11 @@
     });
     var height = lineHeight*(lineCount+1);
     $(textarea).css('height', height);
-    //$(textarea).animate({height: height + 'px'}, 100);
   };
-
 })(jQuery);
 
 (function($) {
-  var commentListEmpty, replyTemplate, commentTemplate, popup, comp;
+  var commentListEmpty, popup, comp;
 
   function init() {
     initTemplates();
@@ -98,13 +95,9 @@
   };
 
   function initTemplates() {
-    // Preload the replyTemplate and commentTemplate.
-    replyTemplate = $('#reply_template').html();
-    commentTemplate = $('#comment_template').html();
     // Create our popup div, the same div is recycled each time comments
     // are displayed.
-    var popupTemplate = $('#popup_template').html();
-    var popup = $(renderTemplate(popupTemplate, opts));
+    popup = $(renderTemplate(popupTemplate, opts));
     // Setup autogrow on the textareas
     popup.find('textarea').autogrow();
     $('body').append(popup);
@@ -629,6 +622,98 @@
 	  }));
     });
   };
+
+  var replyTemplate = '    <li>\
+      <div class="reply_div" id="rd<%id%>">\
+	<form id="rf<%id%>">\
+	  <textarea name="comment"></textarea>\
+          <input type="submit" value="add reply" />\
+          <input type="hidden" name="parent" value="<%id%>" />\
+          <input type="hidden" name="node" value="" />\
+        </form>\
+      </div>\
+    </li>';
+
+  var commentTemplate = '    <div  id="cd<%id%>" class="spxcdiv">\
+      <div class="vote">\
+	<div class="arrow">\
+	  <a href="#" id="uv<%id%>" class="vote">\
+	    <img src="<%upArrow%>" />\
+	  </a>\
+	  <a href="#" id="uu<%id%>" class="un vote">\
+	    <img src="<%upArrowPressed%>" />\
+	  </a>\
+	</div>\
+      <div class="arrow">\
+	  <a href="#" id="dv<%id%>" class="vote">\
+	    <img src="<%downArrow%>" id="da<%id%>" />\
+	  </a>\
+	  <a href="#" id="du<%id%>" class="un vote">\
+	    <img src="<%downArrowPressed%>" />\
+	  </a>\
+	</div>\
+      </div>\
+      <div class="comment_content">\
+	<p class="tagline comment">\
+	  <span class="user_id"><%username%></span>\
+	  <span class="rating"><%pretty_rating%></span>\
+	  <span class="delta"><%time.delta%></span>\
+	</p>\
+	<p class="comment_text comment"><%text%></p>\
+	<p class="comment_opts comment">\
+	  <a href="#" class="reply hidden" id="rl<%id%>">reply &#9657;</a>\
+	  <a href="#" class="close_reply" id="cr<%id%>">reply &#9663;</a>\
+	  <a href="#" id="sp<%id%>" class="show_proposal">\
+	    proposal &#9657;\
+	  </a>\
+	  <a href="#" id="hp<%id%>" class="hide_proposal">\
+	    proposal &#9663;\
+	  </a>\
+	  <a href="#" id="dc<%id%>" class="delete_comment hidden">\
+	    delete\
+	  </a>\
+	  <span id="cm<%id%>" class="moderation hidden">\
+	    <a href="#" id="ac<%id%>" class="accept_comment">accept</a>\
+	    <a href="#" id="rc<%id%>" class="reject_comment">reject</a>\
+	  </span>\
+	</p>\
+	<pre class="proposal" id="pr<%id%>">\
+<#proposal_diff#>\
+	</pre>\
+	<ul class="children" id="cl<%id%>"></ul>\
+      </div>\
+      <div class="clearleft"></div>\
+    </div>';
+
+   var popupTemplate = '    <div class="popup_comment">\
+      <a id="comment_close" href="#">x</a>\
+      <h1>Comments</h1>\
+      <form method="post" id="comment_form" action="/docs/add_comment">\
+	<textarea name="comment" cols="80"></textarea>\
+	<p class="propose_button">\
+	  <a href="#" class="show_propose_change">\
+	    Propose a change &#9657;\
+	  </a>\
+	  <a href="#" class="hide_propose_change">\
+	    Propose a change &#9663;\
+	  </a>\
+	</p>\
+	<textarea name="proposal" cols="80" spellcheck="false"></textarea>\
+	<input type="submit" value="add comment" id="comment_button" />\
+	<input type="hidden" name="node" />\
+	<input type="hidden" name="parent" value="" />\
+      <p class="sort_options">\
+	Sort by:\
+	<a href="#" class="sort_option" id="rating">top</a>\
+	<a href="#" class="sort_option" id="ascage">newest</a>\
+	<a href="#" class="sort_option" id="age">oldest</a>\
+      </p>\
+      </form>\
+      <h3 id="comment_notification">loading comments... <img src="/static/ajax-loader.gif" alt="" /></h3>\
+      <ul id="comment_ul"></ul>\
+    </div>\
+    <div id="focuser"></div>';
+
 
   var opts = jQuery.extend({
     processVoteURL: '/process_vote',
