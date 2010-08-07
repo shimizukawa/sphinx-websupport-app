@@ -5,17 +5,13 @@
 {%- endblock %}
 
 {% block css %}
-  {{ super() }}
-  <link rel="stylesheet" href="/static/websupport.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/static/sphinxdoc.css" type="text/css" />
+  {{ document.css|safe }}
+  <link rel="stylesheet" href="/static/websupport-custom.css" type="text/css" media="screen" />
 {% endblock %}
 
 {%- block js %}
-  <script type="text/javascript">
-    {{ document.DOCUMENTATION_OPTIONS|safe }}
-    {{ document.COMMENT_OPTIONS|safe }}
-  </script>
-  {{ super() }}
-  <script type="text/javascript" src="/static/websupport.js"></script>
+  {{ document.js|safe }}
 {%- endblock %}
 
 {%- block relbar1 %}
