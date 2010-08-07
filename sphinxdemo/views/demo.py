@@ -5,7 +5,8 @@ from sphinx.websupport.errors import *
 
 from sphinxdemo import conf
 
-support = WebSupport(datadir=conf.OUTPUT_DIR)
+support = WebSupport(datadir=conf.OUTPUT_DIR,
+                     search=conf.SEARCH)
 
 demo = Module(__name__)
 

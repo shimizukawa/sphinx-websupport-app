@@ -11,13 +11,7 @@
 
 {%- block js %}
   <script type="text/javascript">
-    var DOCUMENTATION_OPTIONS = {
-      URL_ROOT:    '',
-      VERSION:     '0.6.7',
-      COLLAPSE_MODINDEX: false,
-      FILE_SUFFIX: '',
-      HAS_SOURCE:  true
-    };
+    {{ document.DOCUMENTATION_OPTIONS|safe }}
 
     var COMMENT_OPTIONS = {
       addCommentURL: '/docs/add_comment',
