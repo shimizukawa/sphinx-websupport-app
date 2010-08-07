@@ -200,7 +200,7 @@
 	ul.slideDown(speed);
       },
       error: function(request, textStatus, error) {
-	alert('error');
+	showError('Oops, there was a problem retrieving the comments.');
       },
       dataType: 'json'
     });
@@ -236,7 +236,7 @@
       },
       error: function(request, textStatus, error) {
 	form.find('textarea,input').removeAttr('disabled');
-	alert(error);
+	showError('Oops, there was a problem adding the comment.');
       }
     });
   };
@@ -305,7 +305,7 @@
 	$('#cm' + id).fadeOut('fast');
       },
       error: function(request, textStatus, error) {
-	alert(error);
+	showError("Oops, there was a problem accepting the comment.");
       },
     });
   };
@@ -322,7 +322,7 @@
 	});
       },
       error: function(request, textStatus, error) {
-	alert(error);
+	showError("Oops, there was a problem rejecting the comment.");
       },
     });
   };
@@ -348,7 +348,7 @@
 	div.data('comment', comment);
       },
       error: function(request, textStatus, error) {
-	alert(error);
+	showError("Oops, there was a problem deleting the comment.");
       },
     });
   };
@@ -454,7 +454,7 @@
       url: opts.processVoteURL,
       data: d,
       error: function(request, textStatus, error) {
-	alert(textStatus);
+	showError("Oops, there was a problem casting that vote.");
       }
     });
   };
@@ -600,7 +600,7 @@
 
   function showError(message) {
     $('<div class="popup_error">' +
-      '<h1>You\'ll need to login to vote</h1>' +
+      '<h1>' + message + '</h1>' +
       '</div>')
 	.appendTo('body')
 	  .fadeIn("slow")
