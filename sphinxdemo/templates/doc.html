@@ -13,19 +13,7 @@
   <script type="text/javascript">
     {{ document.DOCUMENTATION_OPTIONS|safe }}
 
-    var COMMENT_OPTIONS = {
-      addCommentURL: '/docs/add_comment',
-      getCommentsURL: '/docs/get_comments',
-      processVoteURL: '/docs/process_vote',
-      acceptCommentURL: '/docs/accept_comment',
-      rejectCommentURL: '/docs/reject_comment',
-      deleteCommentURL: '/docs/delete_comment',
-      {%- if g.user %}
-      voting: true,
-      username: '{{ g.user.name }}',
-      {%- endif %}
-      moderator: false
-    };
+    {{ document.COMMENT_OPTIONS|safe }}
   </script>
   {{ super() }}
   <script type="text/javascript" src="/static/websupport.js"></script>
@@ -126,7 +114,6 @@
       </div>
     </li>
   </script>
-
 {%- endblock %}
 
 {%- block relbar1 %}

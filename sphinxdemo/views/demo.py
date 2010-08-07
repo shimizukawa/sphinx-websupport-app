@@ -6,7 +6,8 @@ from sphinx.websupport.errors import *
 from sphinxdemo import conf
 
 support = WebSupport(datadir=conf.OUTPUT_DIR,
-                     search=conf.SEARCH)
+                     search=conf.SEARCH,
+                     docroot='docs')
 
 demo = Module(__name__)
 
@@ -16,7 +17,9 @@ def docs():
 
 @demo.route('/docs/<path:docname>')
 def doc(docname):
-    document = support.get_document(docname)
+    username = g.user.name if g.user else ''
+    moderator = g.user.moderator if g.user else False
+    document = support.get_document(docname, username, moderator)
     return render_template('doc.html', document=document)
 
 @demo.route('/docs/search')
@@ -40,8 +43,7 @@ def add_comment():
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else 'Anonymous'
     comment = support.add_comment(text, node_id=node_id, parent_id=parent_id,
-                                  username=username, proposal=proposal,
-                                  displayed=False)
+                                  username=username, proposal=proposal)
     return jsonify(comment=comment)
 
 

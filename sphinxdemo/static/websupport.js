@@ -340,12 +340,19 @@
       url: opts.deleteCommentURL,
       data: {id: id},
       success: function(data, textStatus, request) {
-	$('#cd' + id)
-	  .find('span.user_id, p.comment_text')
+	var div = $('#cd' + id);
+	div
+	  .find('span.user_id:first')
 	    .text('[deleted]').end()
-	  .find('span.moderation, a.delete_comment, a.show_proposal, '
-		+ 'a.hide_propsal, a.reply, a.close_reply')
-	    .remove()
+	  .find('p.comment_text:first')
+	    .text('[deleted]').end()
+	  .find('#cm' + id + ', #dc' + id + ', #ac' + id + ', #rc' + id +
+		', #sp' + id + ', #hp' + id + ', #cr' + id + ', #rl' + id)
+	    .remove();
+	var comment = div.data('comment');
+	comment.username = '[deleted]';
+	comment.text = '[deleted]';
+	div.data('comment', comment);
       },
       error: function(request, textStatus, error) {
 	alert(error);
