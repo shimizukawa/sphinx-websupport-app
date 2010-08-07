@@ -6,6 +6,7 @@ from flask import Module, g, request, render_template, session, flash, \
 
 from flaskext.openid import OpenID
 
+from sphinxdemo.views.demo import support
 from sphinxdemo.models import User, db_session
 
 auth = Module(__name__)
@@ -97,7 +98,8 @@ def edit_profile():
             flash(u'Error: you have to enter a valid email address')
         else:
             flash(u'Profile successfully created')
-            g.user.name = form['name']
+            support.update_username(g.user.name, form['name'])
+            g.user.name = form['name']            
             g.user.email = form['email']
             db_session.commit()
             return redirect(url_for('edit_profile'))
