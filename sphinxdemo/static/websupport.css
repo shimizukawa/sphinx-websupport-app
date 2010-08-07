@@ -170,3 +170,7 @@ a.close_reply {
 div.clearleft {
     clear: left;
 }
+
+.hidden {
+    display: none;
+}

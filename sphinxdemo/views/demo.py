@@ -1,6 +1,7 @@
 from flask import Module, render_template, request, g, session, flash, \
      redirect, url_for, abort, jsonify
 from sphinx.websupport import WebSupport
+from sphinx.websupport.errors import *
 
 from sphinxdemo import conf
 
@@ -24,9 +25,10 @@ def search():
 
 @demo.route('/docs/get_comments')
 def get_comments():
-    user_id = g.user.id if g.user else None
+    username = g.user.name if g.user else None
+    moderator = g.user.moderator if g.user else False
     node_id = request.args.get('node', '')
-    data = support.get_comments(node_id, user_id)
+    data = support.get_data(node_id, username, moderator=moderator)
     return jsonify(**data)
 
 @demo.route('/docs/add_comment', methods=['POST'])
@@ -36,9 +38,27 @@ def add_comment():
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else 'Anonymous'
-    comment = support.add_comment(text, node=node_id, parent=parent_id,
-                                  username=username, proposal=proposal)
+    comment = support.add_comment(text, node_id=node_id, parent_id=parent_id,
+                                  username=username, proposal=proposal,
+                                  displayed=False)
     return jsonify(comment=comment)
+
+
+@demo.route('/docs/accept_comment', methods=['POST'])
+def accept_comment():
+    moderator = g.user.moderator if g.user else False
+    comment_id = request.form.get('id')
+    support.accept_comment(comment_id, moderator=g.user.moderator)
+    return 'OK'
+
+
+@demo.route('/docs/reject_comment', methods=['POST'])
+def reject_comment():
+    moderator = g.user.moderator if g.user else False
+    comment_id = request.form.get('id')
+    support.reject_comment(comment_id, moderator=g.user.moderator)
+    return 'OK'
+
 
 @demo.route('/docs/process_vote', methods=['POST'])
 def process_vote():
@@ -48,5 +68,5 @@ def process_vote():
     value = request.form.get('value')
     if value is None or comment_id is None:
         abort(400)
-    support.process_vote(comment_id, g.user.id, value)
+    support.process_vote(comment_id, g.user.name, value)
     return "success"

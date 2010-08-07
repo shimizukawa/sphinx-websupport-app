@@ -83,6 +83,14 @@
       hideProposeChange($(this).attr('id').substring(2));
       return false;
     });
+    $('a.accept_comment').live("click", function() {
+      acceptComment($(this).attr('id').substring(2));
+      return false;
+    });
+    $('a.reject_comment').live("click", function() {
+      rejectComment($(this).attr('id').substring(2));
+      return false;
+    });
   };
 
   function initTemplates() {
@@ -284,10 +292,42 @@
 	return;
       }
     }
+
     // If we get here, this comment rates lower than all the others,
     // or it is the only comment in the list.
     ul.append(li.html(div));
     li.slideDown('fast');
+  };
+
+  function acceptComment(id) {
+    $.ajax({
+      type: 'POST',
+      url: opts.acceptCommentURL,
+      data: {id: id},
+      success: function(data, textStatus, request) {
+	$('#cm' + id).fadeOut('fast');
+      },
+      error: function(request, textStatus, error) {
+	alert(error);
+      },
+    });
+  };
+
+  function rejectComment(id) {
+    $.ajax({
+      type: 'POST',
+      url: opts.rejectCommentURL,
+      data: {id: id},
+      success: function(data, textStatus, request) {
+	var div = $('#cd' + id);
+	div.slideUp('fast', function() {
+	  div.remove();
+	});
+      },
+      error: function(request, textStatus, error) {
+	alert(error);
+      },
+    });
   };
 
   function showProposal(id) {
@@ -502,6 +542,10 @@
     if (comment.proposal_diff) {
       div.find('#sp' + comment.id).show();
     }
+
+    if (opts.moderator && !comment.displayed) {
+      div.find('#cm' + comment.id).show();
+    }
     return div;
   }
 
@@ -554,12 +598,15 @@
     processVoteURL: '/process_vote',
     addCommentURL: '/add_comment',
     getCommentsURL: '/get_comments',
+    acceptCommentURL: '/accept_comment',
+    rejectCommentURL: '/reject_comment',
     commentHTML: '<img src="/static/comment.png" alt="comment" />',
     upArrow: '/static/up.png',
     downArrow: '/static/down.png',
     upArrowPressed: '/static/up-pressed.png',
     downArrowPressed: '/static/down-pressed.png',
-    voting: false
+    voting: false,
+    moderator: false
   }, COMMENT_OPTIONS);
 
   $(document).ready(function() {

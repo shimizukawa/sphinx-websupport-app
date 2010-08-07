@@ -23,9 +23,12 @@
       addCommentURL: '/docs/add_comment',
       getCommentsURL: '/docs/get_comments',
       processVoteURL: '/docs/process_vote',
+      acceptCommentURL: '/docs/accept_comment',
+      rejectCommentURL: '/docs/reject_comment',
       {%- if g.user %}
       voting: true,
       {%- endif %}
+      moderator: true
     };
   </script>
   {{ super() }}
@@ -95,6 +98,10 @@
 	  <a href="#" id="sp<%id%>" class="show_proposal">
 	    proposal &#9657;
 	  </a>
+	  <span id="cm<%id%>" class="moderation hidden">
+	    <a href="#" id="ac<%id%>" class="accept_comment">accept</a>
+	    <a href="#" id="rc<%id%>" class="reject_comment">reject</a>
+	  </span>
 	  <a href="#" id="hp<%id%>" class="hide_proposal">
 	    proposal &#9663;
 	  </a>
