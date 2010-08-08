@@ -1,3 +1,4 @@
+from os import path
 from flask import Module, render_template, request, g, session, flash, \
      redirect, url_for, abort, jsonify
 from sphinx.websupport import WebSupport
@@ -5,7 +6,7 @@ from sphinx.websupport.errors import *
 
 from sphinxdemo import conf
 
-support = WebSupport(datadir=conf.OUTPUT_DIR,
+support = WebSupport(datadir=path.join(conf.OUTPUT_DIR, 'data'),
                      search=conf.SEARCH,
                      docroot='docs')
 

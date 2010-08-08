@@ -7,7 +7,7 @@ from sphinxdemo.models import init_db
 init_db()
 
 support = WebSupport(srcdir=conf.DOCTREE_ROOT,
-                     outdir=conf.OUTPUT_DIR,
+                     builddir=conf.OUTPUT_DIR,
                      search=conf.SEARCH)
 support.build()
 
