@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{%- block title %}
+  {{ document.title }}
+{%- endblock %}
+
+{% block css %}
+  <link rel="stylesheet" href="/static/sphinxdoc.css" type="text/css" />
+  {{ document.css|safe }}
+  <link rel="stylesheet" href="/static/websupport-custom.css" type="text/css" media="screen" />
+{% endblock %}
+
+{%- block js %}
+  {{ document.js|safe }}
+{%- endblock %}
+
+{%- block relbar1 %}
+  {{ document.relbar|safe }}
+{%- endblock %}
+
+{%- block body %}
+  {{ document.body|safe }}
+{%- endblock %}
+
+{%- block sidebar %}
+  {{ document.sidebar|safe }}
+{%- endblock %}
+
+{% block relbar2 %}
+  {{ document.relbar|safe }}
+{% endblock %}
