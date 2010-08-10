@@ -11,6 +11,10 @@ div.popup_error {
     border-bottom: 1px solid #CCC;
 }
 
+a.sphinx_comment img {
+    margin-left: .25em;
+}
+
 /** Popup window styling */
 div.popup_comment {
     display: none;

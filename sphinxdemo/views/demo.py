@@ -52,7 +52,7 @@ def add_comment():
 def accept_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
-    support.accept_comment(comment_id, moderator=g.user.moderator)
+    support.accept_comment(comment_id, moderator=moderator)
     return 'OK'
 
 
