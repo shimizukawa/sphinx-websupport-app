@@ -6,9 +6,10 @@ from sphinx.websupport.errors import *
 
 from sphinxdemo import conf
 
-support = WebSupport(datadir=path.join(conf.OUTPUT_DIR, 'data'),
+support = WebSupport(datadir=path.join(conf.BUILD_DIR, 'data'),
                      search=conf.SEARCH,
-                     docroot='docs')
+                     docroot='docs',
+                     storage=conf.DATABASE_URI)
 
 demo = Module(__name__)
 
