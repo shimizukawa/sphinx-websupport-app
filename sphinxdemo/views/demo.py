@@ -3,15 +3,13 @@ from flask import Module, render_template, request, g, session, flash, \
      redirect, url_for, abort, jsonify
 from sphinx.websupport import WebSupport
 from sphinx.websupport.errors import *
-
-from sphinxdemo import conf
-
-support = WebSupport(datadir=path.join(conf.BUILD_DIR, 'data'),
-                     search=conf.SEARCH,
-                     docroot='docs',
-                     storage=conf.DATABASE_URI)
-
+from sphinxdemo import app
 demo = Module(__name__)
+
+support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
+                     search=app.config['SEARCH'],
+                     docroot='docs',
+                     storage=app.config['DATABASE_URI'])
 
 @demo.route('/docs/')
 def docs():

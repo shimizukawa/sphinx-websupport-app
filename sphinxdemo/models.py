@@ -2,10 +2,10 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from sphinxdemo import conf
+from sphinxdemo import app
 
 # setup sqlalchemy
-engine = create_engine(conf.DATABASE_URI)
+engine = create_engine(app.config['DATABASE_URI'])
 db_session = scoped_session(sessionmaker(autocommit=False,
                                          autoflush=False,
                                          bind=engine))

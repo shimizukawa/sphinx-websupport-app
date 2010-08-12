@@ -1,16 +1,10 @@
 from flask import Flask, g, session
 
-from sphinxdemo import conf
-from sphinxdemo.views.demo import demo
-from sphinxdemo.views.auth import auth
-from sphinxdemo.models import db_session, User
-
 app = Flask(__name__)
 
-app.config.update(
-    DATABASE_URI = conf.DATABASE_URI,
-    SECRET_KEY = conf.SECRET_KEY,
-)
+app.config.from_envvar('SPHINXDEMO_SETTINGS')
+
+from sphinxdemo.models import db_session, User
 
 @app.before_request
 def before_request():
@@ -23,5 +17,7 @@ def after_request(response):
     db_session.remove()
     return response
 
+from sphinxdemo.views.demo import demo
+from sphinxdemo.views.auth import auth
 app.register_module(demo)
 app.register_module(auth)

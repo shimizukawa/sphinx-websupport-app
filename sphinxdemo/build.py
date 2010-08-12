@@ -1,13 +1,17 @@
+from flask import Flask
+
+app = Flask(__name__)
+
+app.config.from_envvar('SPHINXDEMO_SETTINGS')
 
 from sphinx.websupport import WebSupport
 
-from sphinxdemo import conf
 from sphinxdemo.models import init_db
 
 init_db()
 
-support = WebSupport(srcdir=conf.SOURCE_DIR,
-                     builddir=conf.BUILD_DIR,
-                     search=conf.SEARCH,
-                     storage=conf.DATABASE_URI)
+support = WebSupport(srcdir=app.config['SOURCE_DIR'],
+                     builddir=app.config['BUILD_DIR'],
+                     search=app.config['SEARCH'],
+                     storage=app.config['DATABASE_URI'])
 support.build()
