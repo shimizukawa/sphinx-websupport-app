@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
+{% block js %}
+  <script type="text/javascript" src="{{ url_for('static', filename='_static/jquery.js') }}"></script>
+{% endblock %}
 {% block relbar1 %}
     <div class="related">
       <h3>Navigation</h3>
@@ -10,8 +13,11 @@
     </div>
 {% endblock %}
 {% block body %}
-  <h2>Sign in</h2>
-  <form action="" method=post>
+  <h2>Sign in with your OpenID</h2>
+  <img src="{{ url_for('static', filename='oid/google.png') }}" alt="Google" />
+  <img src="{{ url_for('static', filename='oid/myopenid.png') }}" alt="Google" />
+  <img src="{{ url_for('static', filename='oid/yahoo.png') }}" alt="Google" />
+  <form id="login" action="" method=post>
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
     <p>
       OpenID:
