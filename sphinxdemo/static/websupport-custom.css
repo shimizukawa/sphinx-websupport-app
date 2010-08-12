@@ -178,3 +178,9 @@ div.clearleft {
 .hidden {
     display: none;
 }
+
+a.oid img {
+    padding: 5px;
+    border: 1px solid #DDD;
+    margin: 1em .5em 0;
+}
