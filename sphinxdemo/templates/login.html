@@ -14,9 +14,12 @@
 {% endblock %}
 {% block body %}
   <h2>Sign in with your OpenID</h2>
-  <img src="{{ url_for('static', filename='oid/google.png') }}" alt="Google" />
-  <img src="{{ url_for('static', filename='oid/myopenid.png') }}" alt="Google" />
-  <img src="{{ url_for('static', filename='oid/yahoo.png') }}" alt="Google" />
+  <a href="https://www.google.com/accounts/o8/id">
+    <img src="{{ url_for('static', filename='oid/google.png') }}" alt="Google" />
+  </a>
+  <a href="http://yahoo.com/">
+    <img src="{{ url_for('static', filename='oid/yahoo.png') }}" alt="Google" />
+  </a>
   <form id="login" action="" method=post>
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
     <p>
