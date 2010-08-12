@@ -2,6 +2,18 @@
 {% block title %}Sign in{% endblock %}
 {% block js %}
   <script type="text/javascript" src="{{ url_for('static', filename='_static/jquery.js') }}"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('a.oid').click(function(event) {
+        event.preventDefault();
+        var url = $(this).attr('href');
+        $('form#login')
+          .find('input[name="openid"]')
+            .val(url).end()
+          .submit();
+      });
+    });
+  </script>
 {% endblock %}
 {% block relbar1 %}
     <div class="related">
@@ -14,10 +26,10 @@
 {% endblock %}
 {% block body %}
   <h2>Sign in with your OpenID</h2>
-  <a href="https://www.google.com/accounts/o8/id">
+  <a href="https://www.google.com/accounts/o8/id" class="oid">
     <img src="{{ url_for('static', filename='oid/google.png') }}" alt="Google" />
   </a>
-  <a href="http://yahoo.com/">
+  <a href="http://yahoo.com/" class="oid">
     <img src="{{ url_for('static', filename='oid/yahoo.png') }}" alt="Google" />
   </a>
   <form id="login" action="" method=post>
