@@ -5,7 +5,9 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{% block title %}{% endblock %}</title>
-    {% block css %}{% endblock %}
+    {% block css %}
+      <link rel="stylesheet" href="/static/sphinxdoc.css" type="text/css" />
+    {% endblock %}
     {% block js %}{% endblock %}
   </head>
   <body>
@@ -14,10 +16,10 @@
 
       <div id="login">
 	{%- if g.user %}
-	  Logged in as 
+	  Logged in as
 	<a href="{{ url_for('auth.edit_profile') }}">
 	  {{ g.user.name }}
-	</a> -  
+	</a> -
 	  <a href="{{ url_for('auth.logout') }}">logout</a>
 	{%- else %}
 	  <a href="{{ url_for('auth.login') }}" title="Login">Login</a>
@@ -26,9 +28,9 @@
     </div>
 
     {% block relbar1 %}{% endblock %}
-    
+
     {% block sidebar %}{% endblock %}
-    
+
     <div class="document">
       <div class="documentwrapper">
 	<div class="bodywrapper">
@@ -40,7 +42,7 @@
       <div class="clearer"></div>
 
     {% block relbar2 %}{% endblock %}
-    
+
     <div class="footer">
       &copy; Copyright 2007-2010, Georg Brandl.
       Last updated on May 25, 2010.
@@ -48,4 +50,4 @@
     </div>
   </body>
 </html >
-  
+

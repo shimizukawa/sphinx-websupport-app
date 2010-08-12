@@ -71,7 +71,8 @@ def delete_comment():
     username = g.user.name if g.user else ''
     comment_id = request.form.get('id')
     try:
-        support.delete_comment(comment_id, moderator=g.user.moderator)
+        support.delete_comment(comment_id, username=username,
+                               moderator=g.user.moderator)
     except UserNotAuthorizedError:
         abort(401)
     return 'OK'
