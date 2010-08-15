@@ -1,4 +1,14 @@
-# Authentication Stuff
+# -*- coding: utf-8 -*-
+"""
+    sphinxdemo.views.auth
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    Views for the sphinxdemo auth system.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+"""
+
 # Based on mitsuhiko's flask-openid
 # http://github.com/mitsuhiko/flask-openid
 from flask import Module, g, request, render_template, session, flash, \
@@ -99,7 +109,7 @@ def edit_profile():
         else:
             flash(u'Profile successfully created')
             support.update_username(g.user.name, form['name'])
-            g.user.name = form['name']            
+            g.user.name = form['name']
             g.user.email = form['email']
             db_session.commit()
             return redirect(url_for('edit_profile'))

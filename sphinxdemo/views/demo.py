@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+    sphinxdemo.views.demo
+    ~~~~~~~~~~~~~~~~~~~~~
+
+    Views for the Sphinx Web Support demo.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+"""
+
 from os import path
 from flask import Module, render_template, request, g, session, flash, \
      redirect, url_for, abort, jsonify

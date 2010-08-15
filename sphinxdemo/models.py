@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+    sphinxdemo.models
+    ~~~~~~~~~~~~~~~~~
+
+    Models for the Sphinx web support demo webapp.
+
+    :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
+    :license: BSD, see LICENSE for details.
+"""
 from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
