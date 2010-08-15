@@ -17,7 +17,7 @@ class User(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(60))
     moderator = Column(Boolean, default=False)
-    email = Column(String(200))
+    email = Column(String(200), unique=True)
     openid = Column(String(200))
 
     def __init__(self, name, email, openid):
