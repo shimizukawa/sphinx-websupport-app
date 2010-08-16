@@ -25,7 +25,7 @@ Base.query = db_session.query_property()
 class User(Base):
     __tablename__ = 'users'
     id = Column(Integer, primary_key=True)
-    name = Column(String(60))
+    name = Column(String(60), unique=True)
     moderator = Column(Boolean, default=False)
     email = Column(String(200), unique=True)
     openid = Column(String(200))
