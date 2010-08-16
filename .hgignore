@@ -6,3 +6,4 @@
 \.DS_Store$
 ^TAGS
 ~$
+^doc/_build/
