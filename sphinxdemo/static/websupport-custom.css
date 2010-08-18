@@ -11,12 +11,12 @@ div.popup_error {
     border-bottom: 1px solid #CCC;
 }
 
-a.sphinx_comment img {
+a.sphinx_comment img, a.sphinx_comment_close img {
     margin-left: .25em;
 }
 
 /** Popup window styling */
-div.popup_comment {
+div.sphinx_comments {
     display: none;
     width: 800px;
     border: 1px solid #555555;
@@ -26,16 +26,16 @@ div.popup_comment {
     text-align: left;
 }
 
-div.popup_comment h1 {
+div.sphinx_comments h1 {
     border-bottom: 1px dotted #777;
 }
 
-div.popup_comment h3 {
+div.sphinx_comments h3 {
     text-align: center;
     color: #11557C;
 }
 
-div.popup_comment textarea {
+div.sphinx_comments textarea {
     display: block;
     line-height: 1.5em;
     margin: 6px 0 0 0;
@@ -45,7 +45,7 @@ p.propose_button {
     margin: 0;
 }
 
-form#comment_form input {
+form.comment_form input {
     margin-top: .5em;
 }
 
@@ -71,29 +71,13 @@ a.sel {
     text-decoration: underline;
 }
 
-div.popup_comment ul {
+div.sphinx_comments ul {
     list-style: none;
     padding: 0 0 0 10px;
 }
 
-div.popup_comment ul li {
+div.sphinx_comments ul li {
     margin-top: .5em;
-}
-
-div#focuser {
-    background: #000;
-    display: none;
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 8;
-    opacity: 0.75;
-}
-
-a#comment_close {
-    float: right;
 }
 
 div.vote {
