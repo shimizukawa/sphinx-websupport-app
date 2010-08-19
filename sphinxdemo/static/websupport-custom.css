@@ -19,7 +19,7 @@ div.sphinx_comments {
     display: none;
     max-height: 500px;
     overflow: auto;
-    border: 1px solid #555555;
+    border: 1px solid #CCC;
     z-index: 16;
     padding: 6px 18px;
     background: #FFF;
