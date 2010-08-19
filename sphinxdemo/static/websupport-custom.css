@@ -15,10 +15,10 @@ a.sphinx_comment img, a.sphinx_comment_close img {
     margin-left: .25em;
 }
 
-/** Popup window styling */
 div.sphinx_comments {
     display: none;
-    width: 800px;
+    max-height: 500px;
+    overflow: auto;
     border: 1px solid #555555;
     z-index: 16;
     padding: 6px 18px;
