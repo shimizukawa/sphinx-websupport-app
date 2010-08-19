@@ -21,6 +21,7 @@ div.sphinx_comments {
     overflow: auto;
     border: 1px solid #CCC;
     z-index: 16;
+    margin-top: .5em;
     padding: 6px 18px;
     background: #FFF;
     text-align: left;
