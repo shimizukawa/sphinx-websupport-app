@@ -1,4 +1,4 @@
-div.popup_error {
+div.popup-error {
     background: #FFF;
     display: none;
     position: fixed;
@@ -11,11 +11,11 @@ div.popup_error {
     border-bottom: 1px solid #CCC;
 }
 
-a.sphinx_comment img, a.sphinx_comment_close img {
+a.sphinx-comment img, a.sphinx-comment-close img {
     margin-left: .25em;
 }
 
-div.sphinx_comments {
+div.sphinx-comments {
     display: none;
     max-height: 500px;
     overflow: auto;
@@ -27,43 +27,43 @@ div.sphinx_comments {
     text-align: left;
 }
 
-div.sphinx_comments h1 {
+div.sphinx-comments h1 {
     border-bottom: 1px dotted #777;
 }
 
-div.sphinx_comments h3 {
+div.sphinx-comments h3 {
     text-align: center;
     color: #11557C;
 }
 
-div.sphinx_comments textarea {
+div.sphinx-comments textarea {
     display: block;
     line-height: 1.5em;
     margin: 6px 0 0 0;
 }
 
-p.propose_button {
+p.propose-button {
     margin: 0;
 }
 
-form.comment_form input {
+form.comment-form input {
     margin-top: .5em;
 }
 
-a.hide_propose_change {
+a.hide-propose-change {
     display: none;
 }
 
-a.show_propose_change, a.hide_propose_change {
+a.show-propose-change, a.hide-propose-change {
     font-size: smaller;
 }
 
-p.sort_options {
+p.sort-options {
     float: right;
     margin: 0 2em;
 }
 
-a.sort_option {
+a.sort-option {
     margin-left: .5em;
 }
 
@@ -72,12 +72,12 @@ a.sel {
     text-decoration: underline;
 }
 
-div.sphinx_comments ul {
+div.sphinx-comments ul {
     list-style: none;
     padding: 0 0 0 10px;
 }
 
-div.sphinx_comments ul li {
+div.sphinx-comments ul li {
     margin-top: .5em;
 }
 
@@ -92,7 +92,7 @@ div.arrow {
     margin-bottom: 10px;
 }
 
-div.comment_content p, pre.proposal {
+div.comment-content p, pre.proposal {
     line-height: 1.5em;
     margin: 0 0 0 25px;
 }
@@ -103,15 +103,15 @@ pre.proposal {
     margin: .5em 0 .5em 25px;
 }
 
-a.hide_proposal, a.show_proposal {
+a.hide-proposal, a.show-proposal {
     display: none;
 }
 
-pre.proposal .prop_added {
+pre.proposal .prop-added {
     background-color: #CFC;
 }
 
-pre.proposal .prop_removed {
+pre.proposal .prop-removed {
     background-color: #FCC;
 }
 
@@ -133,7 +133,7 @@ a.un {
     display: none;
 }
 
-.user_id {
+.user-id {
     color: #EE9816;
 }
 
@@ -141,7 +141,7 @@ p.tagline span {
     margin-right: .25em;
 }
 
-p.comment_opts a {
+p.comment-opts a {
     color: #666;
     font-size: .9em;
     margin-right: 1em;
@@ -152,7 +152,7 @@ ul.children {
     border-left: 1px solid #DDD;
 }
 
-a.close_reply {
+a.close-reply {
     display: none;
 }
 
