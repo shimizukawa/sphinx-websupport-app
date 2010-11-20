@@ -17,6 +17,7 @@ app = Flask(__name__)
 
 app.config.from_envvar('SPHINXDEMO_SETTINGS')
 
+from sphinx.util import copy_static_entry
 from sphinx.websupport import WebSupport
 
 from sphinxdemo.models import init_db
@@ -29,14 +30,8 @@ support = WebSupport(srcdir=app.config['SOURCE_DIR'],
                      storage=app.config['DATABASE_URI'])
 support.build()
 
-demo_static_dir = os.path.join(os.getcwd(), 'sphinxdemo', 'static')
-
-static_dirs = ['_static', '_sources', '_images']
-
-for directory in static_dirs:
-    src = os.path.join(app.config['BUILD_DIR'], 'static', directory)
-    dst = os.path.join(demo_static_dir, directory)
-    if os.path.isdir(src):
-        if os.path.isdir(dst):
-            shutil.rmtree(dst)
-        shutil.copytree(src, dst)
+# copy resources from this webapp
+for name in ['static', 'templates']:
+    source_dir = os.path.join(os.getcwd(), 'sphinxdemo', name)
+    target_dir = os.path.join(app.config['BUILD_DIR'], name)
+    copy_static_entry(source_dir, target_dir, None)

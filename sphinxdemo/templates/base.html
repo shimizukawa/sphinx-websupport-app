@@ -6,8 +6,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>{% block title %}{% endblock %}</title>
     {% block css %}
-      <link rel="stylesheet" href="/static/sphinxdoc.css" type="text/css" />
-      <link rel="stylesheet" href="/static/websupport-custom.css" type="text/css" media="screen" />
+      <link rel="stylesheet" href="/static/websupport-custom.css" type="text/css"
+            media="screen" />
     {% endblock %}
     {% block js %}{% endblock %}
   </head>
@@ -30,8 +30,6 @@
 
     {% block relbar1 %}{% endblock %}
 
-    {% block sidebar %}{% endblock %}
-
     <div class="document">
       <div class="documentwrapper">
 	<div class="bodywrapper">
@@ -40,15 +38,27 @@
           </div>
 	</div>
       </div>
+    {% block sidebar %}{% endblock %}
       <div class="clearer"></div>
 
     {% block relbar2 %}{% endblock %}
 
+{%- block footer %}
     <div class="footer">
-      &copy; Copyright 2007-2010, Georg Brandl.
-      Last updated on May 25, 2010.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.6+/3e01d30d914e.
+    {%- if sg %}
+    {%- if sg.show_copyright %}
+      &copy; Copyright {{ sg.copyright }}.
+    {%- endif %}
+    {%- if sg.last_updated %}
+      Last updated on {{ sg.last_updated }}.
+    {%- endif %}
+    {%- if sg.show_sphinx %}
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>
+      {{ sg.sphinx_version }}.
+    {%- endif %}
+    {%- endif %}
     </div>
+{%- endblock %}
   </body>
 </html >
 

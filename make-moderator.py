@@ -27,10 +27,9 @@ def make_moderator(email):
         session.close()
 
 if __name__ == '__main__':
-    try:
-        emails = sys.argv[1:]
-    except IndexError:
-        print "usage: python make-moderator.py user@gmail.com"
+    emails = sys.argv[1:]
+    if not emails:
+        print "usage: python make-moderator.py user@gmail.com ..."
 
     for email in emails:
         try:

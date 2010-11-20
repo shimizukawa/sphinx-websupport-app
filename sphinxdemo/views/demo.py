@@ -10,36 +10,41 @@
 """
 
 from os import path
-from flask import Module, render_template, request, g, \
-     redirect, abort, jsonify
+from flask import Module, render_template, request, g, abort, jsonify
 from sphinx.websupport import WebSupport
-from sphinx.websupport.errors import UserNotAuthorizedError
+from sphinx.websupport.errors import UserNotAuthorizedError, \
+     DocumentNotFoundError
 from sphinxdemo import app
 
 demo = Module(__name__)
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
                      search=app.config['SEARCH'],
-                     docroot='docs',
+                     docroot='',
                      storage=app.config['DATABASE_URI'])
 
-@demo.route('/docs/')
-def docs():
-    return redirect('/docs/contents')
+sg = support.get_globalcontext()
 
-@demo.route('/docs/<path:docname>')
+@demo.route('/')
+def index():
+    return doc('')
+
+@demo.route('/<path:docname>/')
 def doc(docname):
     username = g.user.name if g.user else ''
     moderator = g.user.moderator if g.user else False
-    document = support.get_document(docname, username, moderator)
-    return render_template('doc.html', document=document)
+    try:
+        document = support.get_document(docname, username, moderator)
+    except DocumentNotFoundError:
+        abort(404)
+    return render_template('doc.html', document=document, sg=sg)
 
-@demo.route('/docs/search')
+@demo.route('/search/')
 def search():
     document = support.get_search_results(request.args.get('q', ''))
-    return render_template('doc.html', document=document)
+    return render_template('doc.html', document=document, sg=sg)
 
-@demo.route('/docs/get_comments')
+@demo.route('/_get_comments')
 def get_comments():
     username = g.user.name if g.user else None
     moderator = g.user.moderator if g.user else False
@@ -47,7 +52,7 @@ def get_comments():
     data = support.get_data(node_id, username, moderator=moderator)
     return jsonify(**data)
 
-@demo.route('/docs/add_comment', methods=['POST'])
+@demo.route('/_add_comment', methods=['POST'])
 def add_comment():
     parent_id = request.form.get('parent', '')
     node_id = request.form.get('node', '')
@@ -58,24 +63,21 @@ def add_comment():
                                   username=username, proposal=proposal)
     return jsonify(comment=comment)
 
-
-@demo.route('/docs/accept_comment', methods=['POST'])
+@demo.route('/_accept_comment', methods=['POST'])
 def accept_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
     support.accept_comment(comment_id, moderator=moderator)
     return 'OK'
 
-
-@demo.route('/docs/reject_comment', methods=['POST'])
+@demo.route('/_reject_comment', methods=['POST'])
 def reject_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
     support.reject_comment(comment_id, moderator=moderator)
     return 'OK'
 
-
-@demo.route('/docs/delete_comment', methods=['POST'])
+@demo.route('/_delete_comment', methods=['POST'])
 def delete_comment():
     moderator = g.user.moderator if g.user else False
     username = g.user.name if g.user else ''
@@ -87,8 +89,7 @@ def delete_comment():
         abort(401)
     return 'OK'
 
-
-@demo.route('/docs/process_vote', methods=['POST'])
+@demo.route('/_process_vote', methods=['POST'])
 def process_vote():
     if g.user is None:
         abort(401)

@@ -27,6 +27,10 @@ div.popup-error {
     border-bottom: 1px solid #CCC;
 }
 
+div.popup-error div.error-header {
+    font-size: 150%;
+}
+
 a.sphinx-comment img, a.sphinx-comment-close img {
     margin-left: .25em;
 }
@@ -43,11 +47,13 @@ div.sphinx-comments {
     text-align: left;
 }
 
-div.sphinx-comments h1 {
-    border-bottom: 1px dotted #777;
+div.sphinx-comments div.comment-header {
+/*    border-bottom: 1px dotted #777; */
+    font-size: 150%;
+    margin-bottom: 10px;
 }
 
-div.sphinx-comments h3 {
+div.sphinx-comments div.comment-loading {
     text-align: center;
     color: #11557C;
 }

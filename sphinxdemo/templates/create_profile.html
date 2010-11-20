@@ -4,7 +4,7 @@
     <div class="related">
       <h3>Navigation</h3>
       <ul>
-        <li><a href="{{ url_for('index') }}">Contents</a>
+        <li><a href="{{ url_for('demo.index') }}">Contents</a>
           &raquo;</li>
       </ul>
     </div>
@@ -26,6 +26,6 @@
       <input type=hidden name=next value="{{ next }}">
   </form>
   <p>
-    If you don't want to proceed, you can <a href="{{ url_for('logout')
+    If you don't want to proceed, you can <a href="{{ url_for('auth.logout')
     }}">sign out</a> again.
 {% endblock %}

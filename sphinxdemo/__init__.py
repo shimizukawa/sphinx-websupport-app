@@ -1,8 +1,8 @@
 from flask import Flask, g, session
 
 app = Flask(__name__)
-
 app.config.from_envvar('SPHINXDEMO_SETTINGS')
+app.root_path = app.config['BUILD_DIR']
 
 from sphinxdemo.models import db_session, User
 

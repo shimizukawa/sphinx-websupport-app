@@ -12,7 +12,7 @@
 # Based on mitsuhiko's flask-openid
 # http://github.com/mitsuhiko/flask-openid
 from flask import Module, g, request, render_template, session, flash, \
-    redirect, url_for
+    redirect, url_for, abort
 
 from flaskext.openid import OpenID
 
@@ -24,17 +24,13 @@ auth = Module(__name__)
 # setup flask-openid
 oid = OpenID()
 
-@auth.route('/')
-def index():
-    return redirect('/docs/contents')
-
 
 @auth.route('/login', methods=['GET', 'POST'])
 @oid.loginhandler
 def login():
     """Does the login via OpenID. Has to call into `oid.try_login`
-to start the OpenID machinery.
-"""
+    to start the OpenID machinery.
+    """
     # if we are already logged in, go back to were we came from
     if g.user is not None:
         return redirect(oid.get_next_url())
@@ -50,10 +46,10 @@ to start the OpenID machinery.
 @oid.after_login
 def create_or_login(resp):
     """This is called when login with OpenID succeeded and it's not
-necessary to figure out if this is the users's first login or not.
-This function has to redirect otherwise the user will be presented
-with a terrible URL which we certainly don't want.
-"""
+    necessary to figure out if this is the users's first login or not.
+    This function has to redirect otherwise the user will be presented
+    with a terrible URL which we certainly don't want.
+    """
     session['openid'] = resp.identity_url
     user = User.query.filter_by(openid=resp.identity_url).first()
     if user is not None:
@@ -68,10 +64,10 @@ with a terrible URL which we certainly don't want.
 @auth.route('/create-profile', methods=['GET', 'POST'])
 def create_profile():
     """If this is the user's first login, the create_or_login function
-will redirect here so that the user can set up his profile.
-"""
+    will redirect here so that the user can set up his profile.
+    """
     if g.user is not None or 'openid' not in session:
-        return redirect(url_for('index'))
+        return redirect(url_for('demo.index'))
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -99,7 +95,7 @@ def edit_profile():
             db_session.commit()
             session['openid'] = None
             flash(u'Profile deleted')
-            return redirect(url_for('index'))
+            return redirect(url_for('demo.index'))
         form['name'] = request.form['name']
         form['email'] = request.form['email']
         if not form['name']:
