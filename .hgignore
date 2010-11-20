@@ -7,3 +7,4 @@
 ^TAGS
 ~$
 ^doc/_build/
+^test
