@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}Sign in{% endblock %}
 {% block js %}
-  <script type="text/javascript" src="{{ url_for('static', filename='_static/jquery.js') }}"></script>
+  {{ super() }}
   <script type="text/javascript">
     $(document).ready(function() {
       $('a.oid').click(function(event) {
@@ -15,23 +15,23 @@
     });
   </script>
 {% endblock %}
-{% block relbar1 %}
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li><a href="{{ url_for('docs.index') }}">Contents</a>
-          &raquo;</li>
-      </ul>
-    </div>
-{% endblock %}
 {% block body %}
-  <h2>Sign in with your OpenID</h2>
-  <a href="https://www.google.com/accounts/o8/id" class="oid">
-    <img src="{{ url_for('static', filename='oid/google.png') }}" alt="Google" />
+  <h1>Sign in with your OpenID</h1>
+
+  <p>In order to vote for comments, you need to log in with an OpenID.</p>
+
+  <p>Click on a provider logo to use one of these common providers:</p>
+
+  <p>
+  {%- for name, icon, url in oid_providers %}
+  <a href="{{ url }}" class="oid">
+    <img src="{{ url_for('static', filename='oid/' + icon) }}" alt="{{ name }}" />
   </a>
-  <a href="http://yahoo.com/" class="oid">
-    <img src="{{ url_for('static', filename='oid/yahoo.png') }}" alt="Google" />
-  </a>
+  {%- endfor %}
+  </p>
+
+  <p>You can also enter your OpenID:</p>
+  
   <form id="login" action="" method=post>
     {% if error %}<p class=error><strong>Error:</strong> {{ error }}</p>{% endif %}
     <p>

@@ -1,6 +1,21 @@
 div#login {
-    margin-right: 2em;
+    margin: 1em;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 0.75em 1em;
     float: right;
+}
+
+div.flashed-messages {
+    padding: 0.5em 0;
+}
+
+div.flashed-message {
+    margin-bottom: 0.5em;
+    padding: 0.5em;
+    background-color: #eee;
+    border: 1px solid #aaa;
+    font-weight: bold;
 }
 
 p.error {
@@ -15,20 +30,21 @@ input[name="openid"] {
 }
 
 div.popup-error {
-    background: #FFF;
+    background: #EBCACA;
+    color: #783232;
     display: none;
     position: fixed;
-    padding-bottom: .2em;
+    padding: 0.5em;
     margin: 0;
     width: 100%;
     top: 0;
     left: 0;
     z-index: 32;
-    border-bottom: 1px solid #CCC;
+    border-bottom: 2px solid #AAA;
 }
 
-div.popup-error div.error-header {
-    font-size: 150%;
+div.popup-error div.error-message {
+    font-size: 130%;
 }
 
 a.sphinx-comment img, a.sphinx-comment-close img {
@@ -56,8 +72,7 @@ div.sphinx-comments {
 }
 
 div.sphinx-comments div.comment-header {
-/*    border-bottom: 1px dotted #777; */
-    font-size: 150%;
+    font-size: 130%;
     margin-bottom: 10px;
 }
 

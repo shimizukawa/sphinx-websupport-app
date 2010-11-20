@@ -9,21 +9,13 @@
     :license: BSD, see LICENSE for details.
 """
 
-from os import path
 from flask import Module, render_template, request, g, abort, jsonify
-from sphinx.websupport import WebSupport
 from sphinx.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
-from sphinxweb import app
+
+from sphinxweb import support
 
 docs = Module(__name__)
-
-support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
-                     search=app.config['SEARCH'],
-                     docroot='',
-                     storage=app.config['DATABASE_URI'])
-
-sg = support.get_globalcontext()
 
 @docs.route('/')
 def index():
@@ -37,12 +29,12 @@ def doc(docname):
         document = support.get_document(docname, username, moderator)
     except DocumentNotFoundError:
         abort(404)
-    return render_template('doc.html', document=document, sg=sg)
+    return render_template('doc.html', document=document)
 
 @docs.route('/search/')
 def search():
     document = support.get_search_results(request.args.get('q', ''))
-    return render_template('doc.html', document=document, sg=sg)
+    return render_template('doc.html', document=document)
 
 @docs.route('/_get_comments')
 def get_comments():
@@ -59,8 +51,9 @@ def add_comment():
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else 'Anonymous'
-    comment = support.add_comment(text, node_id=node_id, parent_id=parent_id,
-                                  username=username, proposal=proposal)
+    comment = support.add_comment(
+        text, node_id=node_id, parent_id=parent_id,
+        username=username, proposal=proposal)
     return jsonify(comment=comment)
 
 @docs.route('/_accept_comment', methods=['POST'])

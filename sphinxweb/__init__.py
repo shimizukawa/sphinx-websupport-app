@@ -9,13 +9,25 @@
     :license: BSD, see LICENSE for details.
 """
 
+from os import path
 from flask import Flask, g, session
 
 app = Flask(__name__)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
 app.root_path = app.config['BUILD_DIR']
 
+from sphinx.websupport import WebSupport
 from sphinxweb.models import db_session, User
+
+support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
+                     search=app.config['SEARCH'],
+                     docroot='',
+                     storage=app.config['DATABASE_URI'])
+
+@app.context_processor
+def inject_globalcontext():
+    """Inject "sg", the global context."""
+    return dict(sg=support.get_globalcontext())
 
 @app.before_request
 def before_request():

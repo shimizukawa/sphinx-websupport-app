@@ -1,25 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Edit Profile{% endblock %}
-{% block relbar1 %}
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li><a href="{{ url_for('docs.index') }}">Contents</a>
-          &raquo;</li>
-      </ul>
-    </div>
-{% endblock %}
 {% block body %}
-  <h2>Edit Profile</h2>
-  <form action="" method=post>
+  <h1>Edit Profile</h1>
+  <p>
+    Here you can change the information saved in our database for your OpenID.
+  </p>
+  <form action="" method="POST">
     <dl>
-      <dt>Name:
-      <dd><input type=text name=name size=30 value="{{ form.name }}">
-      <dt>E-Mail
-      <dd><input type=text name=email size=30 value="{{ form.email }}">
+      <dt>Name:</dt>
+      <dd><input type="text" name="name" size="30" value="{{ form.name }}" /></dd>
+      <dt>E-Mail:</dt>
+      <dd><input type="text" name="email" size="30" value="{{ form.email }}" /></dd>
     </dl>
     <p>
-      <input type=submit value="Update profile">
-      <input type=submit name=delete value="Delete">
+      <input type="submit" value="Update profile" />
+      <input type="submit" name="delete" value="Delete" />
+      <input type="hidden" name="back" value="{{ back }}" />
+    </p>
   </form>
 {% endblock %}
