@@ -1,8 +1,0 @@
-
-DEBUG = True
-
-SOURCE_DIR = ''
-BUILD_DIR = ''
-DATABASE_URI = ''
-SECRET_KEY = ''
-SEARCH = ''
