@@ -35,6 +35,14 @@ a.sphinx-comment img, a.sphinx-comment-close img {
     margin-left: .25em;
 }
 
+a.sphinx-comment.nocomment {
+    visibility: hidden;
+}
+
+:hover > a.sphinx-comment {
+    visibility: visible;
+}
+
 div.sphinx-comments {
     display: none;
     max-height: 500px;
