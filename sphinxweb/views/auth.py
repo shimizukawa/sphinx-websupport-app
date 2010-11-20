@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    sphinxdemo.views.auth
-    ~~~~~~~~~~~~~~~~~~~~~
+    sphinxweb.views.auth
+    ~~~~~~~~~~~~~~~~~~~~
 
-    Views for the sphinxdemo auth system.
+    Views for the sphinxweb auth system.
 
     :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
@@ -16,8 +16,8 @@ from flask import Module, g, request, render_template, session, flash, \
 
 from flaskext.openid import OpenID
 
-from sphinxdemo.views.demo import support
-from sphinxdemo.models import User, db_session
+from sphinxweb.views.docs import support
+from sphinxweb.models import User, db_session
 
 auth = Module(__name__)
 
@@ -67,7 +67,7 @@ def create_profile():
     will redirect here so that the user can set up his profile.
     """
     if g.user is not None or 'openid' not in session:
-        return redirect(url_for('demo.index'))
+        return redirect(url_for('docs.index'))
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
@@ -95,7 +95,7 @@ def edit_profile():
             db_session.commit()
             session['openid'] = None
             flash(u'Profile deleted')
-            return redirect(url_for('demo.index'))
+            return redirect(url_for('docs.index'))
         form['name'] = request.form['name']
         form['email'] = request.form['email']
         if not form['name']:

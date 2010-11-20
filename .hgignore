@@ -1,6 +1,3 @@
-^sphinxdemo/static/_images/
-^sphinxdemo/static/_static/
-^sphinxdemo/static/_sources/
 .*\.pyc
 .dir-locals.el
 \.DS_Store$

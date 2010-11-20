@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    sphinxdemo.make-moderator
-    ~~~~~~~~~~~~~~~~~~~~~~~~~
+    sphinxweb make-moderator
+    ~~~~~~~~~~~~~~~~~~~~~~~~
 
     Script to make a user a moderator.
 
@@ -10,12 +10,12 @@
 """
 import sys
 from flask import Flask
-from sphinxdemo.models import db_session, User
+from sphinxweb.models import db_session, User
 from sqlalchemy.orm.exc import NoResultFound
 
 app = Flask(__name__)
 
-app.config.from_envvar('SPHINXDEMO_SETTINGS')
+app.config.from_envvar('SPHINXWEB_SETTINGS')
 
 def make_moderator(email):
     session = db_session()

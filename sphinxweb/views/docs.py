@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    sphinxdemo.views.demo
-    ~~~~~~~~~~~~~~~~~~~~~
+    sphinxweb.views.docs
+    ~~~~~~~~~~~~~~~~~~~~
 
-    Views for the Sphinx Web Support demo.
+    Views for the Sphinx Web Support app.
 
     :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
@@ -14,9 +14,9 @@ from flask import Module, render_template, request, g, abort, jsonify
 from sphinx.websupport import WebSupport
 from sphinx.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
-from sphinxdemo import app
+from sphinxweb import app
 
-demo = Module(__name__)
+docs = Module(__name__)
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
                      search=app.config['SEARCH'],
@@ -25,11 +25,11 @@ support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
 
 sg = support.get_globalcontext()
 
-@demo.route('/')
+@docs.route('/')
 def index():
     return doc('')
 
-@demo.route('/<path:docname>/')
+@docs.route('/<path:docname>/')
 def doc(docname):
     username = g.user.name if g.user else ''
     moderator = g.user.moderator if g.user else False
@@ -39,12 +39,12 @@ def doc(docname):
         abort(404)
     return render_template('doc.html', document=document, sg=sg)
 
-@demo.route('/search/')
+@docs.route('/search/')
 def search():
     document = support.get_search_results(request.args.get('q', ''))
     return render_template('doc.html', document=document, sg=sg)
 
-@demo.route('/_get_comments')
+@docs.route('/_get_comments')
 def get_comments():
     username = g.user.name if g.user else None
     moderator = g.user.moderator if g.user else False
@@ -52,7 +52,7 @@ def get_comments():
     data = support.get_data(node_id, username, moderator=moderator)
     return jsonify(**data)
 
-@demo.route('/_add_comment', methods=['POST'])
+@docs.route('/_add_comment', methods=['POST'])
 def add_comment():
     parent_id = request.form.get('parent', '')
     node_id = request.form.get('node', '')
@@ -63,21 +63,21 @@ def add_comment():
                                   username=username, proposal=proposal)
     return jsonify(comment=comment)
 
-@demo.route('/_accept_comment', methods=['POST'])
+@docs.route('/_accept_comment', methods=['POST'])
 def accept_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
     support.accept_comment(comment_id, moderator=moderator)
     return 'OK'
 
-@demo.route('/_reject_comment', methods=['POST'])
+@docs.route('/_reject_comment', methods=['POST'])
 def reject_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
     support.reject_comment(comment_id, moderator=moderator)
     return 'OK'
 
-@demo.route('/_delete_comment', methods=['POST'])
+@docs.route('/_delete_comment', methods=['POST'])
 def delete_comment():
     moderator = g.user.moderator if g.user else False
     username = g.user.name if g.user else ''
@@ -89,7 +89,7 @@ def delete_comment():
         abort(401)
     return 'OK'
 
-@demo.route('/_process_vote', methods=['POST'])
+@docs.route('/_process_vote', methods=['POST'])
 def process_vote():
     if g.user is None:
         abort(401)

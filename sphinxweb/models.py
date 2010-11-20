@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    sphinxdemo.models
-    ~~~~~~~~~~~~~~~~~
+    sphinxweb.models
+    ~~~~~~~~~~~~~~~~
 
-    Models for the Sphinx web support demo webapp.
+    Models for the Sphinx web support app.
 
     :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
@@ -13,7 +13,7 @@ from sqlalchemy import create_engine, Column, Integer, String, Boolean
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-from sphinxdemo import app
+from sphinxweb import app
 
 # setup sqlalchemy
 engine = create_engine(app.config['DATABASE_URI'])
