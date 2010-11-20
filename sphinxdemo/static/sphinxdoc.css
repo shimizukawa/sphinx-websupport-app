@@ -337,19 +337,3 @@ div.viewcode-block:target {
     border-top: 1px solid #ac9;
     border-bottom: 1px solid #ac9;
 }
-
-div#login {
-    margin-right: 2em;
-    float: right;
-}
-
-p.error {
-    color: #783232;
-    padding: 10px;
-    background: #EBCACA;
-}
-
-input[name="openid"] {
-    background: url(openid.png) 4px no-repeat;
-    padding-left: 24px;
-}
