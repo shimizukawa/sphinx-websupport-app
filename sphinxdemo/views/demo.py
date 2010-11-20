@@ -10,11 +10,12 @@
 """
 
 from os import path
-from flask import Module, render_template, request, g, session, flash, \
-     redirect, url_for, abort, jsonify
+from flask import Module, render_template, request, g, \
+     redirect, abort, jsonify
 from sphinx.websupport import WebSupport
-from sphinx.websupport.errors import *
+from sphinx.websupport.errors import UserNotAuthorizedError
 from sphinxdemo import app
+
 demo = Module(__name__)
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
@@ -70,7 +71,7 @@ def accept_comment():
 def reject_comment():
     moderator = g.user.moderator if g.user else False
     comment_id = request.form.get('id')
-    support.reject_comment(comment_id, moderator=g.user.moderator)
+    support.reject_comment(comment_id, moderator=moderator)
     return 'OK'
 
 
@@ -81,7 +82,7 @@ def delete_comment():
     comment_id = request.form.get('id')
     try:
         support.delete_comment(comment_id, username=username,
-                               moderator=g.user.moderator)
+                               moderator=moderator)
     except UserNotAuthorizedError:
         abort(401)
     return 'OK'
