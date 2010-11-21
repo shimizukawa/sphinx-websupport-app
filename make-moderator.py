@@ -19,12 +19,11 @@ app.config.from_envvar('SPHINXWEB_SETTINGS')
 
 def make_moderator(email):
     session = db_session()
-    try:
-        session.query(User).filter(User.email == email).\
-            update({User.moderator: True})
-        session.commit()
-    finally:
-        session.close()
+    nusers = session.query(User).filter(User.email == email).\
+             update({User.moderator: True})
+    session.commit()
+    session.close()
+    return nusers
 
 if __name__ == '__main__':
     emails = sys.argv[1:]
@@ -32,7 +31,5 @@ if __name__ == '__main__':
         print "usage: python make-moderator.py user@gmail.com ..."
 
     for email in emails:
-        try:
-            make_moderator(email)
-        except NoResultFound:
+        if not make_moderator(email):
             print "email address %s not found" % email
