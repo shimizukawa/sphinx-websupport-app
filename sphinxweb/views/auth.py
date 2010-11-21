@@ -9,12 +9,12 @@
     :license: BSD, see LICENSE for details.
 """
 
-# Based on mitsuhiko's flask-openid
-# http://github.com/mitsuhiko/flask-openid
 from flask import Module, g, request, render_template, session, flash, \
     redirect, url_for, abort
 
 from flaskext.openid import OpenID
+
+from sqlalchemy.exc import IntegrityError
 
 from sphinxweb import support
 from sphinxweb.models import User, db_session
@@ -83,10 +83,15 @@ def create_profile():
         elif '@' not in email:
             flash(u'Error: you have to enter a valid email address.')
         else:
-            db_session.add(User(name, email, session['openid']))
-            db_session.commit()
-            flash(u'Profile successfully created.')
-            return redirect(oid.get_next_url())
+            db_session.query(User).filter(User.name == name)
+            try:
+                db_session.add(User(name, email, session['openid']))
+                db_session.commit()
+            except IntegrityError:
+                flash(u'Error: user name or email address already taken.')
+            else:
+                flash(u'Profile successfully created.')
+                return redirect(oid.get_next_url())
     return render_template('create_profile.html', next_url=oid.get_next_url())
 
 
