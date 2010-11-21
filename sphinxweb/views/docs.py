@@ -68,13 +68,6 @@ def accept_comment():
     support.accept_comment(comment_id, moderator=moderator)
     return 'OK'
 
-@docs.route('/_reject_comment', methods=['POST'])
-def reject_comment():
-    moderator = g.user.moderator if g.user else False
-    comment_id = request.form.get('id')
-    support.reject_comment(comment_id, moderator=moderator)
-    return 'OK'
-
 @docs.route('/_delete_comment', methods=['POST'])
 def delete_comment():
     moderator = g.user.moderator if g.user else False
