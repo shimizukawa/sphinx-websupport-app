@@ -50,10 +50,13 @@ def add_comment():
     node_id = request.form.get('node', '')
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
-    username = g.user.name if g.user is not None else 'Anonymous'
-    comment = support.add_comment(
-        text, node_id=node_id, parent_id=parent_id,
-        username=username, proposal=proposal)
+    username = g.user.name if g.user is not None else None
+    try:
+        comment = support.add_comment(
+            text, node_id=node_id, parent_id=parent_id,
+            username=username, proposal=proposal)
+    except UserNotAuthorizedError:
+        abort(401)
     return jsonify(comment=comment)
 
 @docs.route('/_accept_comment', methods=['POST'])
