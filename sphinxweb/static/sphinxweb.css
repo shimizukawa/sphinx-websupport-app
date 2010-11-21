@@ -145,6 +145,10 @@ ul.comment-ul li, ul.comment-children li {
     margin-top: .5em;
 }
 
+div.moderate {
+    background-color: #FFB;
+}
+
 div.vote {
     padding-top: 3px;
     float: left;
@@ -170,6 +174,10 @@ div.comment-content pre {
     line-height: 1.2em;
     background-color: #F5F5F5;
     border-color: #CCC;
+}
+
+div.comment-text {
+    margin: .3em 0;
 }
 
 a.hide-proposal, a.show-proposal {
