@@ -28,6 +28,7 @@ from sphinxweb.models import db_session, User
 NEW_COMMENT_MAIL = '''\
 A new comment has been submitted for moderation:
 
+Document: %(document)s
 Author: %(username)s
 Text:
 %(text)s
@@ -43,10 +44,12 @@ def moderation_callback(comment):
     msg = Message('New comment', recipients=app.config['NOTIFY'])
     moderate_url = url_for('docs.doc', docname=comment['document'],
                            _external=True) + '#comment-' + comment['node']
-    msg.body = NEW_COMMENT_MAIL % {'url':      moderate_url,
+    msg.body = NEW_COMMENT_MAIL % {'document': comment['document'],
                                    'username': comment['username'],
                                    'text':     comment['original_text'],
-                                   'proposal': comment['proposal_diff_text']}
+                                   'proposal': comment['proposal_diff_text'],
+                                   'url':      moderate_url,
+                                   }
     try:
         mail.send(msg)
     except Exception, err:
