@@ -178,7 +178,7 @@ a.hide-proposal, a.show-proposal {
 
 pre.proposal {
     display: none;
-    margin: .5em 0 .5em 25px;
+    margin: .5em 0;
 }
 
 pre.proposal .prop-added {

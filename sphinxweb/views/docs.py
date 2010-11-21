@@ -76,11 +76,13 @@ def delete_comment():
     username = g.user.name if g.user else ''
     comment_id = request.form.get('id')
     try:
-        support.delete_comment(comment_id, username=username,
-                               moderator=moderator)
+        if support.delete_comment(comment_id, username=username,
+                                  moderator=moderator):
+            return 'delete'
+        else:
+            return 'mark'
     except UserNotAuthorizedError:
         abort(401)
-    return 'OK'
 
 @docs.route('/_process_vote', methods=['POST'])
 def process_vote():
