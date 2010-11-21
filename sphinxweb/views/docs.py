@@ -91,4 +91,4 @@ def process_vote():
     if value is None or comment_id is None:
         abort(400)
     support.process_vote(comment_id, g.user.name, value)
-    return "success"
+    return 'success'

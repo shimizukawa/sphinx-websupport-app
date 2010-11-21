@@ -60,7 +60,7 @@ def create_or_login(resp):
     session['openid'] = resp.identity_url
     user = User.query.filter_by(openid=resp.identity_url).first()
     if user is not None:
-        flash(u'Successfully signed in.')
+        flash(u'Successfully logged in.')
         g.user = user
         return redirect(oid.get_next_url())
     return redirect(url_for('create_profile', next=oid.get_next_url(),
@@ -92,7 +92,7 @@ def create_profile():
 
 @auth.route('/_profile', methods=['GET', 'POST'])
 def edit_profile():
-    """Updates a profile"""
+    """Update profile info."""
     if g.user is None:
         abort(401)
     form = dict(name=g.user.name, email=g.user.email)
@@ -119,9 +119,8 @@ def edit_profile():
     return render_template('edit_profile.html', form=form,
                            openid=session['openid'])
 
-
 @auth.route('/_logout')
 def logout():
     session.pop('openid', None)
-    flash(u'You were signed out.')
+    flash(u'You were logged out.')
     return redirect(oid.get_next_url())
