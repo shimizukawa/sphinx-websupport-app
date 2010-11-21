@@ -101,7 +101,7 @@ def edit_profile():
             db_session.delete(g.user)
             db_session.commit()
             session['openid'] = None
-            flash(u'Profile deleted.')
+            flash(u'Profile successfully deleted.')
             return redirect(url_for('docs.index'))
         form['name'] = request.form['name']
         form['email'] = request.form['email']
@@ -116,7 +116,8 @@ def edit_profile():
             db_session.commit()
             flash(u'Profile successfully updated.')
             return redirect(url_for('edit_profile'))
-    return render_template('edit_profile.html', form=form)
+    return render_template('edit_profile.html', form=form,
+                           openid=session['openid'])
 
 
 @auth.route('/_logout')

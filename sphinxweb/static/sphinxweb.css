@@ -47,15 +47,15 @@ div.popup-error div.error-message {
     font-size: 130%;
 }
 
-a.sphinx-comment img, a.sphinx-comment-close img {
+a.sphinx-comment-open img, a.sphinx-comment-close img {
     margin-left: .25em;
 }
 
-a.sphinx-comment.nocomment {
+a.sphinx-comment-open.nocomment {
     visibility: hidden;
 }
 
-:hover > a.sphinx-comment {
+:hover > a.sphinx-comment-open {
     visibility: visible;
 }
 
@@ -87,8 +87,17 @@ div.sphinx-comments textarea {
     margin: 6px 0 0 0;
 }
 
+p.add-a-comment {
+    margin: 0;
+}
+
 p.propose-button {
     margin: 0;
+    font-size: smaller;
+}
+
+form.comment-form {
+    margin-bottom: .5em;
 }
 
 form.comment-form input {
@@ -97,10 +106,6 @@ form.comment-form input {
 
 a.hide-propose-change {
     display: none;
-}
-
-a.show-propose-change, a.hide-propose-change {
-    font-size: smaller;
 }
 
 p.sort-options {
@@ -117,12 +122,12 @@ a.sel {
     text-decoration: underline;
 }
 
-div.sphinx-comments ul {
+ul.comment-ul {
     list-style: none;
-    padding: 0 0 0 10px;
+    padding: 0;
 }
 
-div.sphinx-comments ul li {
+ul.comment-ul li {
     margin-top: .5em;
 }
 
@@ -137,7 +142,7 @@ div.arrow {
     margin-bottom: 10px;
 }
 
-div.comment-content p, pre.proposal {
+div.comment-content p {
     line-height: 1.5em;
     margin: 0 0 0 25px;
 }
@@ -146,6 +151,9 @@ pre.proposal {
     color: #555;
     display: none;
     margin: .5em 0 .5em 25px;
+    line-height: 1.2em;
+    background-color: #F5F5F5;
+    border-color: #CCC;
 }
 
 a.hide-proposal, a.show-proposal {

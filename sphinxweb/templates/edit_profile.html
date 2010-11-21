@@ -3,7 +3,8 @@
 {% block body %}
   <h1>Edit Profile</h1>
   <p>
-    Here you can change the information saved in our database for your OpenID.
+    Here you can change the information saved in our database for your OpenID
+    ({{ openid }}).
   </p>
   <form action="" method="POST">
     <dl>
@@ -14,7 +15,7 @@
     </dl>
     <p>
       <input type="submit" value="Update profile" />
-      <input type="submit" name="delete" value="Delete" />
+      <input type="submit" name="delete" value="Delete profile" />
       <input type="hidden" name="back" value="{{ back }}" />
     </p>
   </form>
