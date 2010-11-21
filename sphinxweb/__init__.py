@@ -45,8 +45,8 @@ def moderation_callback(comment):
                            _external=True) + '#comment-' + comment['node']
     msg.body = NEW_COMMENT_MAIL % {'url':      moderate_url,
                                    'username': comment['username'],
-                                   'text':     comment['text'],
-                                   'proposal': comment['proposal_diff']}
+                                   'text':     comment['original_text'],
+                                   'proposal': comment['proposal_diff_text']}
     try:
         mail.send(msg)
     except Exception, err:
