@@ -51,10 +51,12 @@ def add_comment():
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else None
+    moderator = g.user.moderator if g.user else False
     try:
-        comment = support.add_comment(
-            text, node_id=node_id, parent_id=parent_id,
-            username=username, proposal=proposal)
+        comment = support.add_comment(text, node_id, parent_id,
+                                      displayed=moderator,
+                                      username=username, proposal=proposal,
+                                      moderator=moderator)
     except UserNotAuthorizedError:
         abort(401)
     return jsonify(comment=comment)

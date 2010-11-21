@@ -9,20 +9,54 @@
     :license: BSD, see LICENSE for details.
 """
 
+import sys
 from os import path
-from flask import Flask, g, session
+
+from flask import Flask, g, session, url_for
+from flaskext.mail import Mail, Message
+
+from sphinx.websupport import WebSupport
 
 app = Flask(__name__)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
 app.root_path = app.config['BUILD_DIR']
 
-from sphinx.websupport import WebSupport
+mail = Mail(app)
+
 from sphinxweb.models import db_session, User
+
+NEW_COMMENT_MAIL = '''\
+A new comment has been submitted for moderation:
+
+Author: %(username)s
+Text:
+%(text)s
+Proposal:
+%(proposal)s
+
+Moderate: %(url)s
+'''
+
+def moderation_callback(comment):
+    if not app.config['NOTIFY']:
+        return
+    msg = Message('New comment', recipients=app.config['NOTIFY'])
+    moderate_url = url_for('docs.doc', docname=comment['document'],
+                           _external=True) + '#comment-' + comment['node']
+    msg.body = NEW_COMMENT_MAIL % {'url':      moderate_url,
+                                   'username': comment['username'],
+                                   'text':     comment['text'],
+                                   'proposal': comment['proposal_diff']}
+    try:
+        mail.send(msg)
+    except Exception, err:
+        print >>sys.stderr, 'mail not sent:', err  # for now
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
                      search=app.config['SEARCH'],
                      docroot='',
-                     storage=app.config['DATABASE_URI'])
+                     storage=app.config['DATABASE_URI'],
+                     moderation_callback=moderation_callback)
 
 @app.context_processor
 def inject_globalcontext():

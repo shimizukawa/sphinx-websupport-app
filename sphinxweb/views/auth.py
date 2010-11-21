@@ -116,11 +116,15 @@ def edit_profile():
             flash(u'Error: you have to enter a valid email address.')
         else:
             support.update_username(g.user.name, form['name'])
-            g.user.name = form['name']
-            g.user.email = form['email']
-            db_session.commit()
-            flash(u'Profile successfully updated.')
-            return redirect(url_for('edit_profile'))
+            try:
+                g.user.name = form['name']
+                g.user.email = form['email']
+                db_session.commit()
+            except IntegrityError:
+                flash(u'Error: user name or email address already taken.')
+            else:
+                flash(u'Profile successfully updated.')
+                return redirect(url_for('edit_profile'))
     return render_template('edit_profile.html', form=form,
                            openid=session['openid'])
 
