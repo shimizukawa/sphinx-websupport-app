@@ -32,6 +32,7 @@ Document: %(document)s
 Author: %(username)s
 Text:
 %(text)s
+
 Proposal:
 %(proposal)s
 
@@ -41,9 +42,10 @@ Moderate: %(url)s
 def moderation_callback(comment):
     if not app.config['NOTIFY']:
         return
-    msg = Message('New comment', recipients=app.config['NOTIFY'])
-    moderate_url = url_for('docs.doc', docname=comment['document'],
-                           _external=True) + '#comment-' + comment['node']
+    doc_url = url_for('docs.doc', docname=comment['document'], _external=True)
+    msg = Message('New comment on ' + doc_url,
+                  recipients=app.config['NOTIFY'])
+    moderate_url = doc_url + '#comment-' + comment['node']
     msg.body = NEW_COMMENT_MAIL % {'document': comment['document'],
                                    'username': comment['username'],
                                    'text':     comment['original_text'],
