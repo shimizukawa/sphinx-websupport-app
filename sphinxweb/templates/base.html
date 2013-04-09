@@ -6,7 +6,8 @@
     {% block css %}
       {{ sg.css|safe }}
     {% endblock %}
-    <link rel="stylesheet" href="/static/sphinxweb.css" type="text/css" media="screen"/>
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="{{ url_for('static', filename='sphinxweb.css') }}"/>
     {% block js %}
       {{ sg.script|safe }}
     {% endblock %}
