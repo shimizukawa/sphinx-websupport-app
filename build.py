@@ -28,9 +28,3 @@ support = WebSupport(srcdir=app.config['SOURCE_DIR'],
                      search=app.config['SEARCH'],
                      storage=app.config['DATABASE_URI'])
 support.build()
-
-# copy resources from this webapp
-for name in ['static', 'templates']:
-    source_dir = os.path.join(os.getcwd(), 'sphinxweb', name)
-    target_dir = os.path.join(app.config['BUILD_DIR'], name)
-    copy_static_entry(source_dir, target_dir, None)

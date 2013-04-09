@@ -12,14 +12,18 @@
 import sys
 from os import path
 
-from flask import Flask, g, session, url_for
+from flask import Flask, g, session, url_for, send_from_directory
 from flask.ext.mail import Mail, Message
 
 from sphinx.websupport import WebSupport
 
 app = Flask(__name__)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
-app.root_path = app.config['BUILD_DIR']
+
+@app.route('/static/_<section>/<path:name>')
+def sphinx_statics(section, name):
+    directory = path.join(app.config['BUILD_DIR'], 'static', '_' + section)
+    return send_from_directory(directory, name)
 
 mail = Mail(app)
 
