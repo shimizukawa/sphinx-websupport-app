@@ -6,3 +6,8 @@
 ^doc/_build/
 ^test
 ^sphinx$
+^.Python$
+^bin/
+^lib/
+^include/
+\.egg-info/
