@@ -12,7 +12,7 @@
 from flask import Module, g, request, render_template, session, flash, \
     redirect, url_for, abort
 
-from flaskext.openid import OpenID
+from flask.ext.openid import OpenID
 
 from sqlalchemy.exc import IntegrityError
 

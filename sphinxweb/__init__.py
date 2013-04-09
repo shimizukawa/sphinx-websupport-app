@@ -13,7 +13,7 @@ import sys
 from os import path
 
 from flask import Flask, g, session, url_for
-from flaskext.mail import Mail, Message
+from flask.ext.mail import Mail, Message
 
 from sphinx.websupport import WebSupport
 
