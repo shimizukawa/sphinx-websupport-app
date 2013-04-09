@@ -19,7 +19,11 @@ from sqlalchemy.exc import IntegrityError
 from sphinxweb import support
 from sphinxweb.models import User, db_session
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint(
+    'auth', __name__,
+    template_folder='templates',
+    static_folder='static',
+    static_url_path='/auth/static')
 
 # setup flask-openid
 oid = OpenID()

@@ -83,6 +83,6 @@ def after_request(response):
     db_session.remove()
     return response
 
-from sphinxweb.views import docs, auth
+from . import docs, auth
 app.register_blueprint(docs.docs)
 app.register_blueprint(auth.auth)

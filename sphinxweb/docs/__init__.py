@@ -15,7 +15,7 @@ from sphinx.websupport.errors import UserNotAuthorizedError, \
 
 from sphinxweb import support
 
-docs = Blueprint('docs', __name__)
+docs = Blueprint('docs', __name__, template_folder='templates')
 
 @docs.route('/')
 def index():
