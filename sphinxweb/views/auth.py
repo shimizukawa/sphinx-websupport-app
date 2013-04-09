@@ -9,7 +9,7 @@
     :license: BSD, see LICENSE for details.
 """
 
-from flask import Module, g, request, render_template, session, flash, \
+from flask import Blueprint, g, request, render_template, session, flash, \
     redirect, url_for, abort
 
 from flask.ext.openid import OpenID
@@ -19,7 +19,7 @@ from sqlalchemy.exc import IntegrityError
 from sphinxweb import support
 from sphinxweb.models import User, db_session
 
-auth = Module(__name__)
+auth = Blueprint('auth', __name__)
 
 # setup flask-openid
 oid = OpenID()
@@ -63,7 +63,7 @@ def create_or_login(resp):
         flash(u'Successfully logged in.')
         g.user = user
         return redirect(oid.get_next_url())
-    return redirect(url_for('create_profile', next=oid.get_next_url(),
+    return redirect(url_for('.create_profile', next=oid.get_next_url(),
                             name=resp.fullname or resp.nickname,
                             email=resp.email))
 
@@ -124,7 +124,7 @@ def edit_profile():
                 flash(u'Error: user name or email address already taken.')
             else:
                 flash(u'Profile successfully updated.')
-                return redirect(url_for('edit_profile'))
+                return redirect(url_for('.edit_profile'))
     return render_template('edit_profile.html', form=form,
                            openid=session['openid'])
 

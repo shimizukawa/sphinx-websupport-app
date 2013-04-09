@@ -25,7 +25,7 @@
   <p>
   {%- for name, icon, url in oid_providers %}
   <a href="{{ url }}" class="oid">
-    <img src="{{ url_for('.static', filename='oid/' + icon) }}" alt="{{ name }}" />
+    <img src="{{ url_for('static', filename='oid/' + icon) }}" alt="{{ name }}" />
   </a>
   {%- endfor %}
   </p>

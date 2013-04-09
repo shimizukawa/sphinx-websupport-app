@@ -9,13 +9,13 @@
     :license: BSD, see LICENSE for details.
 """
 
-from flask import Module, render_template, request, g, abort, jsonify
+from flask import Blueprint, render_template, request, g, abort, jsonify
 from sphinx.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
 
 from sphinxweb import support
 
-docs = Module(__name__)
+docs = Blueprint('docs', __name__)
 
 @docs.route('/')
 def index():
