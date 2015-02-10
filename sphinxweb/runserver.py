@@ -8,5 +8,12 @@
     :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
-import sphinxweb.runserver
-sphinxweb.runserver.main()
+from . import app
+
+
+def main():
+    app.run()
+
+
+if __name__ == '__main__':
+    main()
