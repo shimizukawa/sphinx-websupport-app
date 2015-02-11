@@ -17,6 +17,12 @@ from sphinxweb import support
 
 docs = Blueprint('docs', __name__, template_folder='templates')
 
+
+def is_moderator(user):
+    moderator = g.user.moderator if g.user else False
+    return moderator
+
+
 @docs.route('/')
 def index():
     return doc('')
@@ -24,7 +30,7 @@ def index():
 @docs.route('/<path:docname>/')
 def doc(docname):
     username = g.user.name if g.user else ''
-    moderator = g.user.moderator if g.user else False
+    moderator = is_moderator(g.user)
     try:
         document = support.get_document(docname, username, moderator)
     except DocumentNotFoundError:
@@ -39,7 +45,10 @@ def search():
 @docs.route('/_get_comments')
 def get_comments():
     username = g.user.name if g.user else None
-    moderator = g.user.moderator if g.user else False
+    if docs.config.get('MODERATE_ENABLE', True):
+        moderator = is_moderator(g.user)
+    else:
+        moderator = True
     node_id = request.args.get('node', '')
     data = support.get_data(node_id, username, moderator=moderator)
     return jsonify(**data)
@@ -51,7 +60,10 @@ def add_comment():
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else None
-    moderator = g.user.moderator if g.user else False
+    if docs.config.get('MODERATE_ENABLE', True):
+        moderator = is_moderator(g.user)
+    else:
+        moderator = True
     try:
         comment = support.add_comment(text, node_id, parent_id,
                                       displayed=moderator,
@@ -63,14 +75,14 @@ def add_comment():
 
 @docs.route('/_accept_comment', methods=['POST'])
 def accept_comment():
-    moderator = g.user.moderator if g.user else False
+    moderator = is_moderator(g.user)
     comment_id = request.form.get('id')
     support.accept_comment(comment_id, moderator=moderator)
     return 'OK'
 
 @docs.route('/_delete_comment', methods=['POST'])
 def delete_comment():
-    moderator = g.user.moderator if g.user else False
+    moderator = is_moderator(g.user)
     username = g.user.name if g.user else ''
     comment_id = request.form.get('id')
     try:
