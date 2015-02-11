@@ -1,13 +1,5 @@
 .*\.pyc
-.dir-locals.el
-\.DS_Store$
-^TAGS
-~$
 ^doc/_build/
-^test
-^sphinx$
-^.Python$
-^bin/
-^lib/
-^include/
 \.egg-info/
+build/
+dist/
