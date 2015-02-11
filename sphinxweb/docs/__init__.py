@@ -9,7 +9,8 @@
     :license: BSD, see LICENSE for details.
 """
 
-from flask import Blueprint, render_template, request, g, abort, jsonify
+from flask import (
+        Blueprint, render_template, request, g, abort, jsonify, current_app)
 from sphinx.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
 
@@ -45,7 +46,7 @@ def search():
 @docs.route('/_get_comments')
 def get_comments():
     username = g.user.name if g.user else None
-    if docs.config.get('MODERATE_ENABLE', True):
+    if current_app.config.get('MODERATE_ENABLE', True):
         moderator = is_moderator(g.user)
     else:
         moderator = True
@@ -60,7 +61,7 @@ def add_comment():
     text = request.form.get('text', '')
     proposal = request.form.get('proposal', '')
     username = g.user.name if g.user is not None else None
-    if docs.config.get('MODERATE_ENABLE', True):
+    if current_app.config.get('MODERATE_ENABLE', True):
         moderator = is_moderator(g.user)
     else:
         moderator = True
