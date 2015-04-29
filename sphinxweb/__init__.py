@@ -76,8 +76,8 @@ def inject_globalcontext():
 @app.before_request
 def before_request():
     g.user = None
-    if session.get(session.get('token_key', None), None):
-        g.user = User.query.filter_by(openid=session[session['token_key']]).first()
+    if 'user_id' in session:
+        g.user = User.query.filter_by(openid=session['user_id']).first()
 
 @app.after_request
 def after_request(response):

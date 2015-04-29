@@ -43,6 +43,22 @@ google = oauth.remote_app(
     app_key='GOOGLE',
 )
 
+github = oauth.remote_app(
+    'github',
+    request_token_params={'scope': 'user:email'},
+    base_url='https://api.github.com/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize',
+    app_key='GITHUB',
+)
+
+oauth2_providers = {
+    'google': {'api': google, 'resp': 'userinfo', 'icon': 'google.png'},
+    'github': {'api': github, 'resp': 'user', 'icon': 'github.png'},
+}
+
 
 @auth.record_once
 def on_register(state):
@@ -64,7 +80,10 @@ def login():
             return oid.try_login(openid, ask_for=['email', 'fullname',
                                                   'nickname'])
     return render_template('login.html', next=oid.get_next_url(),
-                           error=oid.fetch_error(), oid_providers=oid_providers)
+                           error=oid.fetch_error(),
+                           oid_providers=oid_providers,
+                           oauth2_provider_icons=[(k, v['icon']) for k, v in oauth2_providers.items()],
+                           )
 
 
 @oid.after_login
@@ -87,22 +106,32 @@ def create_or_login(resp):
 
 
 @auth.route('/_login_google')
-def login_google():
-    return google.authorize(callback=url_for('.oauth2callback_google', _external=True))
+def login_oauth2():
+    key = request.args.get('key')
+    if key not in oauth2_providers:
+        return redirect(url_for('.login'))
+
+    provider = oauth2_providers[key]['api']
+    session['token_key'] = key
+    return provider.authorize(callback=url_for('.oauth2callback', _external=True))
 
 
 @auth.route('/_oauth2callback')
-def oauth2callback_google():
-    resp = google.authorized_response()
+def oauth2callback():
+    key = session['token_key']
+    provider = oauth2_providers[key]['api']
+    resp_field = oauth2_providers[key]['resp']
+
+    resp = provider.authorized_response()
     if resp is None:
         return 'Access denied: reason=%s error=%s' % (
             request.args['error_reason'],
             request.args['error_description']
         )
-    session['token_key'] = token_key = 'google_token'
-    session[token_key] = resp['access_token']
-    me = google.get('userinfo')
-    user = User.query.filter_by(openid=me.data['id']).first()
+    session[key] = resp['access_token']
+    me = provider.get(resp_field)
+    session['user_id'] = '{key}/{id}'.format(key=key, id=me.data['id'])
+    user = User.query.filter_by(openid=session['user_id']).first()
 
     if user is not None:
         flash(u'Successfully logged in.')
@@ -114,7 +143,13 @@ def oauth2callback_google():
 
 @google.tokengetter
 def get_google_oauth_token():
-    return (session.get('google_token'), current_app.secret_key)
+    return (session.get('google'), current_app.secret_key)
+
+
+@github.tokengetter
+def get_github_oauth_token():
+    return (session.get('github'), current_app.secret_key)
+
 
 @auth.route('/_create_profile', methods=['GET', 'POST'])
 def create_profile():
@@ -133,7 +168,7 @@ def create_profile():
         else:
             db_session.query(User).filter(User.name == name)
             try:
-                db_session.add(User(name, email, session[session['token_key']]))
+                db_session.add(User(name, email, session['user_id']))
                 db_session.commit()
             except IntegrityError:
                 flash(u'Error: user name or email address already taken.')
@@ -177,6 +212,7 @@ def edit_profile():
 
 @auth.route('/_logout')
 def logout():
+    session.pop('user_id', None)
     session.pop(session.pop('token_key', None), None)
     flash(u'You were logged out.')
     return redirect(oid.get_next_url())

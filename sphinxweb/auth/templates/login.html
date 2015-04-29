@@ -20,11 +20,13 @@
 
   <p>In order to see document, add comment and vote to comment, you need to log in with social login.</p>
 
-  <h2>with Google</h2>
+  <h2>with Social</h2>
 
-  <a href="{{ url_for('.login_google') }}">
-    <img src="{{ url_for('.static', filename='google.png') }}" alt="google" />
+  {%- for name, icon in oauth2_provider_icons %}
+  <a href="{{ url_for('.login_oauth2') }}?key={{ name }}">
+    <img src="{{ url_for('.static', filename=icon) }}" alt="{{ name }}" />
   </a>
+  {%- endfor %}
 
   <h2>with OpenID</h2>
 
