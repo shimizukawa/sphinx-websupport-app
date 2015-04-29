@@ -15,6 +15,7 @@ like this::
     SEARCH = 'xapian'
     NOTIFY = ''                               # email address to notify
     MODERATE_ENABLE = False                   # if set True, all comments will be published after moderation
+    LOGIN_REQUIRED = False                    # if set True, users need login to see any documentation
 
 Then you'll need to set an environment variable pointing to your configurate
 file. On Linux you can set the environment variable with this command::
@@ -41,4 +42,23 @@ Moderation
 Make user moderator::
 
    $ make-moderator user1@example.com user2@example.com
+
+Permission
+===========
+
+Add permission for user::
+
+   $ make-user-permission user1@example.com read
+
+SphinxWeb supports these permissions:
+
+:read: read the document.
+
+
+Migration
+==========
+
+Migrate your database:
+
+   $ alembic upgrade head
 

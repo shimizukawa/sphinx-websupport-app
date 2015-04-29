@@ -10,7 +10,7 @@
 """
 
 from flask import (
-        Blueprint, render_template, request, g, abort, jsonify, current_app)
+        Blueprint, render_template, request, g, abort, jsonify, current_app, redirect)
 from sphinx.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
 
@@ -22,6 +22,26 @@ docs = Blueprint('docs', __name__, template_folder='templates')
 def is_moderator(user):
     moderator = g.user.moderator if g.user else False
     return moderator
+
+
+@docs.before_request
+def before_docs_request():
+    if not current_app.config.get('LOGIN_REQUIRED'):
+        return
+
+    if g.user is None:
+        return redirect('/_login')
+
+    if 'read' not in g.user.permission_names:
+        return (
+            "<html><body>"
+            "<p>"
+            "Your account <strong>{user.email}</strong> has no permission 'read'. <br>"
+            "Please contact to the moderator for this site."
+            "</p>"
+            '<a href="/_logout">Logout</a>'
+            "</body></html>"
+        ).format(user=g.user)
 
 
 @docs.route('/')

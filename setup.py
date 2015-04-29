@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sphinxweb",
-    version="0.1.0",
+    version="0.1.1",
     url='https://github.com/shimizukawa/sphinx-websupport-app',
     author="Jacob Mason",
     author_email="noreply@example.org",
@@ -13,6 +13,7 @@ setup(
         'Flask-OpenID',
         'Flask-Mail',
         'SQLAlchemy',
+        'alembic',
         'Sphinx',
     ],
     entry_points={
@@ -20,6 +21,7 @@ setup(
             'sphinxweb-build=sphinxweb.build:main',
             'sphinxweb-runserver=sphinxweb.runserver:main',
             'sphinxweb-make-moderator=sphinxweb.make_moderator:main',
+            'sphinxweb-make-user-permission=sphinxweb.make_user_permission:main',
         ]
     },
 )
