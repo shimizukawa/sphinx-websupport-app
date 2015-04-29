@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="sphinxweb",
     version="0.1.0",
-    url='https://bitbucket.org/shimizukawa/sphinx-demo-webapp',
+    url='https://github.com/shimizukawa/sphinx-websupport-app',
     author="Jacob Mason",
     author_email="noreply@example.org",
     packages=find_packages(),
