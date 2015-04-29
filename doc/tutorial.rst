@@ -8,12 +8,13 @@ configuration somewhere on your filesystem.  You'll need to add the correct
 values for your configuration. When you're done the file should look something
 like this::
 
-    DEBUG = True
-    SOURCE_DIR = '/path/to/rst/sources'
-    BUILD_DIR = '/path/to/build/directory'
+    DEBUG = True                              # show traceback if exception is occurred.
+    SOURCE_DIR = '/path/to/rst/sources'       # absolute path is required
+    BUILD_DIR = '/path/to/build/directory'    # absolute path is required
     DATABASE_URI = 'sqlite:////path/to/sqlite/db'
-    SECRET_KEY = 'Your secret key'
     SEARCH = 'xapian'
+    NOTIFY = ''                               # email address to notify
+    MODERATE_ENABLE = False                   # if set True, all comments will be published after moderation
 
 Then you'll need to set an environment variable pointing to your configurate
 file. On Linux you can set the environment variable with this command::
@@ -33,3 +34,11 @@ development server::
 
 Now you can open up your browser and go to http://127.0.0.1:5000/
 to view the documentation.
+
+Moderation
+============
+
+Make user moderator::
+
+   $ make-moderator user1@example.com user2@example.com
+
