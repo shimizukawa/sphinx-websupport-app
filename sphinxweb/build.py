@@ -21,7 +21,44 @@ from sphinx.websupport import WebSupport
 from .models import init_db
 
 
+class Traversable(object):
+    def __init__(self, iterable):
+        self.iterable = iterable
+
+    def traverse(self, condition, *args, **kw):
+        for n in self.iterable:
+            yield DummyNode(uid=n.id, rawsource=n.source)
+
+
+class DummyNode(object):
+    def __init__(self, uid, rawsource):
+        self.uid = uid
+        self.rawsource = rawsource
+
+
+def add_uids(doctree, condition):
+    from sphinx.util import SEP
+    from sphinx.websupport.storage.sqlalchemy_db import Node
+    from sphinx import versioning
+    from .models import db_session
+
+    srcdir = app.config['SOURCE_DIR']
+    source = doctree['source']
+    docname = os.path.splitext(os.path.relpath(source, srcdir).replace(os.path.sep, SEP))[0]
+
+    q = db_session().query(Node).filter(Node.document==docname)
+    return versioning.merge_doctrees(Traversable(q), doctree, condition)
+
+
+def patch_to_sphinx():
+    import sphinx.versioning
+    import sphinx.environment
+    sphinx.versioning.add_uids = add_uids
+    sphinx.environment.add_uids = add_uids
+
+
 def main():
+    patch_to_sphinx()
     init_db()
 
     support = WebSupport(srcdir=app.config['SOURCE_DIR'],
