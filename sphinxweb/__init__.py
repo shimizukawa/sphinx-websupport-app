@@ -10,6 +10,7 @@
 """
 
 import sys
+import os
 from os import path
 
 from flask import Flask, g, session, url_for, send_from_directory
@@ -17,7 +18,7 @@ from flask.ext.mail import Mail, Message
 
 from sphinx.websupport import WebSupport
 
-app = Flask(__name__)
+app = Flask(__name__, instance_path=os.getcwd(), instance_relative_config=True)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
 
 @app.route('/static/_<section>/<path:name>')
