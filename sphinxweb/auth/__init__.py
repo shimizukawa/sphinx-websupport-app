@@ -10,10 +10,9 @@
 """
 
 from flask import Blueprint, g, request, render_template, session, flash, \
-    redirect, url_for, abort
-
+    redirect, url_for, abort, current_app
 from flask.ext.openid import OpenID
-
+from flask_oauthlib.client import OAuth
 from sqlalchemy.exc import IntegrityError
 
 from sphinxweb import support
@@ -29,11 +28,41 @@ auth = Blueprint(
 oid = OpenID()
 
 oid_providers = [
-    ('Google', 'google.png', 'https://www.google.com/accounts/o8/id'),
-    ('Yahoo', 'yahoo.png', 'http://yahoo.com/'),
-    ('myOpenID', 'myopenid.png', 'https://www.myopenid.com/'),
     ('Launchpad', 'launchpad.png', 'https://login.launchpad.net/'),
 ]
+
+oauth = OAuth()
+google = oauth.remote_app(
+    'google',
+    request_token_params={'scope': 'email'},
+    base_url='https://www.googleapis.com/oauth2/v1/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://accounts.google.com/o/oauth2/token',
+    authorize_url='https://accounts.google.com/o/oauth2/auth',
+    app_key='GOOGLE',
+)
+
+github = oauth.remote_app(
+    'github',
+    request_token_params={'scope': 'user:email'},
+    base_url='https://api.github.com/',
+    request_token_url=None,
+    access_token_method='POST',
+    access_token_url='https://github.com/login/oauth/access_token',
+    authorize_url='https://github.com/login/oauth/authorize',
+    app_key='GITHUB',
+)
+
+oauth2_providers = {
+    'google': {'api': google, 'resp': 'userinfo', 'icon': 'google.png'},
+    'github': {'api': github, 'resp': 'user', 'icon': 'github.png'},
+}
+
+
+@auth.record_once
+def on_register(state):
+    oauth.init_app(state.app)
 
 
 @auth.route('/_login', methods=['GET', 'POST'])
@@ -51,7 +80,10 @@ def login():
             return oid.try_login(openid, ask_for=['email', 'fullname',
                                                   'nickname'])
     return render_template('login.html', next=oid.get_next_url(),
-                           error=oid.fetch_error(), oid_providers=oid_providers)
+                           error=oid.fetch_error(),
+                           oid_providers=oid_providers,
+                           oauth2_provider_icons=[(k, v['icon']) for k, v in oauth2_providers.items()],
+                           )
 
 
 @oid.after_login
@@ -61,7 +93,8 @@ def create_or_login(resp):
     This function has to redirect otherwise the user will be presented
     with a terrible URL which we certainly don't want.
     """
-    session['openid'] = resp.identity_url
+    session['token_key'] = token_key = 'openid'
+    session[token_key] = resp.identity_url
     user = User.query.filter_by(openid=resp.identity_url).first()
     if user is not None:
         flash(u'Successfully logged in.')
@@ -72,12 +105,58 @@ def create_or_login(resp):
                             email=resp.email))
 
 
+@auth.route('/_login_google')
+def login_oauth2():
+    key = request.args.get('key')
+    if key not in oauth2_providers:
+        return redirect(url_for('.login'))
+
+    provider = oauth2_providers[key]['api']
+    session['token_key'] = key
+    return provider.authorize(callback=url_for('.oauth2callback', _external=True))
+
+
+@auth.route('/_oauth2callback')
+def oauth2callback():
+    key = session['token_key']
+    provider = oauth2_providers[key]['api']
+    resp_field = oauth2_providers[key]['resp']
+
+    resp = provider.authorized_response()
+    if resp is None:
+        return 'Access denied: reason=%s error=%s' % (
+            request.args['error_reason'],
+            request.args['error_description']
+        )
+    session[key] = resp['access_token']
+    me = provider.get(resp_field)
+    session['user_id'] = '{key}/{id}'.format(key=key, id=me.data['id'])
+    user = User.query.filter_by(openid=session['user_id']).first()
+
+    if user is not None:
+        flash(u'Successfully logged in.')
+        g.user = user
+        return redirect(url_for('docs.index'))
+    return redirect(url_for('.create_profile', next=url_for('docs.index'),
+                            name=me.data['name'], email=me.data['email']))
+
+
+@google.tokengetter
+def get_google_oauth_token():
+    return (session.get('google'), current_app.secret_key)
+
+
+@github.tokengetter
+def get_github_oauth_token():
+    return (session.get('github'), current_app.secret_key)
+
+
 @auth.route('/_create_profile', methods=['GET', 'POST'])
 def create_profile():
     """If this is the user's first login, the create_or_login function
     will redirect here so that the user can set up his profile.
     """
-    if g.user is not None or 'openid' not in session:
+    if g.user is not None or 'token_key' not in session or session['token_key'] not in session:
         return redirect(url_for('docs.index'))
     if request.method == 'POST':
         name = request.form['name']
@@ -89,7 +168,7 @@ def create_profile():
         else:
             db_session.query(User).filter(User.name == name)
             try:
-                db_session.add(User(name, email, session['openid']))
+                db_session.add(User(name, email, session['user_id']))
                 db_session.commit()
             except IntegrityError:
                 flash(u'Error: user name or email address already taken.')
@@ -109,7 +188,7 @@ def edit_profile():
         if 'delete' in request.form:
             db_session.delete(g.user)
             db_session.commit()
-            session['openid'] = None
+            session[session['token_key']] = None
             flash(u'Profile successfully deleted.')
             return redirect(url_for('docs.index'))
         form['name'] = request.form['name']
@@ -129,11 +208,11 @@ def edit_profile():
             else:
                 flash(u'Profile successfully updated.')
                 return redirect(url_for('.edit_profile'))
-    return render_template('edit_profile.html', form=form,
-                           openid=session['openid'])
+    return render_template('edit_profile.html', form=form)
 
 @auth.route('/_logout')
 def logout():
-    session.pop('openid', None)
+    session.pop('user_id', None)
+    session.pop(session.pop('token_key', None), None)
     flash(u'You were logged out.')
     return redirect(oid.get_next_url())

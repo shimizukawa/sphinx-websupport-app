@@ -17,6 +17,16 @@ like this::
     MODERATE_ENABLE = False                   # if set True, all comments will be published after moderation
     LOGIN_REQUIRED = False                    # if set True, users need login to see any documentation
 
+Additionally, if you want to use OAuth2 authenticatoin with Google/Github, you need these
+settings as well::
+
+    GOOGLE_CONSUMER_KEY = "<your-google-key>.apps.googleusercontent.com"
+    GOOGLE_CONSUMER_SECRET = "<your-google-secret>"
+
+    GITHUB_CONSUMER_KEY = "<your-github-key>"
+    GITHUB_CONSUMER_SECRET = "<your-github-secret>"
+
+
 Then you'll need to set an environment variable pointing to your configurate
 file. On Linux you can set the environment variable with this command::
 

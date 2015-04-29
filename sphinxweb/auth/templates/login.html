@@ -16,16 +16,26 @@
   </script>
 {% endblock %}
 {% block body %}
-  <h1>Sign in with your OpenID</h1>
+  <h1>Sign in</h1>
 
-  <p>In order to vote for comments, you need to log in with an OpenID.</p>
+  <p>In order to see document, add comment and vote to comment, you need to log in with social login.</p>
+
+  <h2>with Social</h2>
+
+  {%- for name, icon in oauth2_provider_icons %}
+  <a href="{{ url_for('.login_oauth2') }}?key={{ name }}">
+    <img src="{{ url_for('.static', filename=icon) }}" alt="{{ name }}" />
+  </a>
+  {%- endfor %}
+
+  <h2>with OpenID</h2>
 
   <p>Click on a provider logo to use one of these common providers:</p>
 
   <p>
   {%- for name, icon, url in oid_providers %}
   <a href="{{ url }}" class="oid">
-    <img src="{{ url_for('.static', filename='oid/' + icon) }}" alt="{{ name }}" />
+    <img src="{{ url_for('.static', filename=icon) }}" alt="{{ name }}" />
   </a>
   {%- endfor %}
   </p>
