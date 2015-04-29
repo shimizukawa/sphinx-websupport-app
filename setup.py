@@ -12,6 +12,7 @@ setup(
         'Flask',
         'Flask-OpenID',
         'Flask-Mail',
+        'Flask-OAuthlib',
         'SQLAlchemy',
         'Sphinx',
     ],
