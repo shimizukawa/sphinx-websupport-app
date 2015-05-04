@@ -130,15 +130,20 @@ def oauth2callback():
         )
     session[key] = resp['access_token']
     me = provider.get(resp_field)
-    session['user_id'] = '{key}/{id}'.format(key=key, id=me.data['id'])
-    user = User.query.filter_by(openid=session['user_id']).first()
+    try:
+        session['user_id'] = '{key}/{id}'.format(key=key, id=me.data['id'])
+        user = User.query.filter_by(openid=session['user_id']).first()
+        if user is None:
+            return redirect(url_for('.create_profile', next=url_for('docs.index'),
+                                    name=me.data['name'], email=me.data['email']))
+    except KeyError as e:
+        import logging
+        logging.exception('KeyError: %r', me.data)
+        raise
 
-    if user is not None:
-        flash(u'Successfully logged in.')
-        g.user = user
-        return redirect(url_for('docs.index'))
-    return redirect(url_for('.create_profile', next=url_for('docs.index'),
-                            name=me.data['name'], email=me.data['email']))
+    flash(u'Successfully logged in.')
+    g.user = user
+    return redirect(url_for('docs.index'))
 
 
 @google.tokengetter
