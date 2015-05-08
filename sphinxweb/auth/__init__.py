@@ -134,8 +134,12 @@ def oauth2callback():
         session['user_id'] = '{key}/{id}'.format(key=key, id=me.data['id'])
         user = User.query.filter_by(openid=session['user_id']).first()
         if user is None:
-            return redirect(url_for('.create_profile', next=url_for('docs.index'),
-                                    name=me.data['name'], email=me.data['email']))
+            return redirect(url_for(
+                '.create_profile',
+                next=url_for('docs.index'),
+                name=me.data.get('name') or me.data.get('login') or me.data.get('id'),
+                email=me.data.get('email', ''),
+            ))
     except KeyError as e:
         import logging
         logging.exception('KeyError: %r', me.data)
