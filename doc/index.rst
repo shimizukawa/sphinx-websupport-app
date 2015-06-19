@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
 
    tutorial
+   markdown
 
 Indices and tables
 ==================

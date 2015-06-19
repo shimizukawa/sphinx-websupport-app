@@ -21,7 +21,21 @@ from sphinx.websupport import WebSupport
 from .models import init_db
 
 
-class Traversable(object):
+class ReCommonMarkTraversableWrapper(object):
+    """
+    patch for node.rawsource empty problem
+    """
+    def __init__(self, doctree):
+        self.doctree = doctree
+
+    def traverse(self, condition, *args, **kw):
+        for n in self.doctree.traverse(condition, *args, **kw):
+            if not n.rawsource:
+                n.rawsource = n.astext()
+            yield n
+
+
+class DummyTraversable(object):
     def __init__(self, iterable):
         self.iterable = iterable
 
@@ -47,7 +61,8 @@ def add_uids(doctree, condition):
     docname = os.path.splitext(os.path.relpath(source, srcdir).replace(os.path.sep, SEP))[0]
 
     q = db_session().query(Node).filter(Node.document==docname)
-    return versioning.merge_doctrees(Traversable(q), doctree, condition)
+    return versioning.merge_doctrees(
+        DummyTraversable(q), ReCommonMarkTraversableWrapper(doctree), condition)
 
 
 def patch_to_sphinx():
