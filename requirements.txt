@@ -1,3 +1,5 @@
+https://github.com/sphinx-doc/sphinxcontrib-websupport/archive/master.zip
+https://github.com/sphinx-doc/sphinx/archive/master.zip
 -e .
 recommonmark
 whoosh
