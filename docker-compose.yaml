@@ -1,0 +1,28 @@
+version: '2'
+services:
+  build:
+    build: .
+    image: sphinx-websupport
+    volumes:
+      - .:/source
+    environment:
+      SPHINXWEB_SETTINGS: /source/sphinxweb.cfg
+      SPHINX_SOURCE_PATH: /source/doc
+      SPHINX_BUILD_PATH: /source/doc/_build
+      DBURI: sqlite:////source/doc/db.sqlite
+    command: sphinxweb-build
+
+  ws:
+    build: .
+    image: sphinx-websupport
+    volumes:
+      - .:/source
+    environment:
+      SPHINXWEB_SETTINGS: /source/sphinxweb.cfg
+      SPHINX_SOURCE_PATH: /source/doc
+      SPHINX_BUILD_PATH: /source/doc/_build
+      DBURI: sqlite:////source/doc/db.sqlite
+    ports:
+      - "8000:8000"
+    command: gunicorn sphinxweb:app -b 0.0.0.0:8000 --log-file -
+

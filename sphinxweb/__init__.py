@@ -8,6 +8,7 @@
     :copyright: Copyright 2007-2010 by the Sphinx team, see AUTHORS.
     :license: BSD, see LICENSE for details.
 """
+from __future__ import print_function
 
 import sys
 import os
@@ -59,8 +60,8 @@ def moderation_callback(comment):
                                    }
     try:
         mail.send(msg)
-    except Exception, err:
-        print >>sys.stderr, 'mail not sent:', err  # for now
+    except Exception as err:
+        print('mail not sent:', err, file=sys.stderr)  # for now
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
                      search=app.config['SEARCH'],
