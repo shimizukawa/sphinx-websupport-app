@@ -14,9 +14,9 @@ import os
 from os import path
 
 from flask import Flask, g, session, url_for, send_from_directory
-from flask.ext.mail import Mail, Message
+from flask_mail import Mail, Message
 
-from sphinx.websupport import WebSupport
+from sphinxcontrib.websupport import WebSupport
 
 app = Flask(__name__, instance_path=os.getcwd(), instance_relative_config=True)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
@@ -59,7 +59,7 @@ def moderation_callback(comment):
                                    }
     try:
         mail.send(msg)
-    except Exception, err:
+    except Exception as err:
         print >>sys.stderr, 'mail not sent:', err  # for now
 
 support = WebSupport(datadir=path.join(app.config['BUILD_DIR'], 'data'),
