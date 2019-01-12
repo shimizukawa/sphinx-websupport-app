@@ -11,7 +11,7 @@
 
 from flask import Blueprint, g, request, render_template, session, flash, \
     redirect, url_for, abort, current_app
-from flask.ext.openid import OpenID
+from flask_openid import OpenID
 from flask_oauthlib.client import OAuth
 from sqlalchemy.exc import IntegrityError
 

@@ -11,7 +11,7 @@
 
 from flask import (
         Blueprint, render_template, request, g, abort, jsonify, current_app)
-from sphinx.websupport.errors import UserNotAuthorizedError, \
+from sphinxcontrib.websupport.errors import UserNotAuthorizedError, \
      DocumentNotFoundError
 
 from sphinxweb import support

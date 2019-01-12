@@ -16,7 +16,7 @@ app = Flask(__name__, instance_path=os.getcwd(), instance_relative_config=True)
 app.config.from_envvar('SPHINXWEB_SETTINGS')
 
 from sphinx.util import copy_static_entry
-from sphinx.websupport import WebSupport
+from sphinxcontrib.websupport import WebSupport
 
 from .models import init_db
 
